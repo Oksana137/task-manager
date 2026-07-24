@@ -2,6 +2,8 @@ import express from "express";
 import userRouter from "./routes/userRouter.js";
 import authRouter from "./routes/authRouter.js";
 import taskRouter from "./routes/taskRouter.js";
+import projectRouter from "./routes/projectRouter.js";
+import "./models/associations.js";
 import cors from "cors";
 import { errorHandler } from "./middleware/errorHandler.js";
 
@@ -19,6 +21,7 @@ app.use(
 );
 
 app.use("/tasks", taskRouter);
+app.use("/projects", projectRouter);
 
 app.use("/users", userRouter);
 app.use("/auth", authRouter);

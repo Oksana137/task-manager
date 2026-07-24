@@ -5,12 +5,12 @@ import Home from "../components/Home";
 
 const MainLayout = () => {
   return (
-    <div className="grid grid-cols-[auto_1fr] grid-rows-[auto_1fr]">
-      <Home />
-      <HorisontalMenu />
-      <VerticalMenu />
-      <Outlet />
-    </div>
+      <div className="grid grid-cols-[auto_1fr] grid-rows-[auto_1fr]">
+        <Home />
+        <HorisontalMenu />
+        <VerticalMenu />
+        <Outlet />
+      </div>
   );
 };
 

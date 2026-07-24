@@ -4,8 +4,8 @@ import {
   Route,
   RouterProvider,
 } from "react-router-dom";
-import CartContextProvider from "./contexts/CartContext";
 import AuthContextProvider from "./contexts/AuthContext";
+import { ProjectProvider } from "./contexts/ProjectContext";
 import MainLayout from "./layouts/MainLayout";
 import ProtectedLayout from "./layouts/ProtectedLayout";
 import Tasks from "./pages/Tasks";
@@ -35,9 +35,9 @@ function App() {
 
   return (
     <AuthContextProvider>
-      <CartContextProvider>
+      <ProjectProvider>
         <RouterProvider router={router} />
-      </CartContextProvider>
+      </ProjectProvider>
     </AuthContextProvider>
   );
 }

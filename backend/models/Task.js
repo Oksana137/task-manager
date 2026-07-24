@@ -26,6 +26,14 @@ const Task = sequelize.define(
       allowNull: false,
       defaultValue: "to do",
     },
+    projectId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: "Projects",
+        key: "id",
+      },
+    },
   },
   {
     timestamps: false,

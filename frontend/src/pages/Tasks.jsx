@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
+
 import TasksGroup from "../components/TasksGroup";
+import { useProject } from "../contexts/ProjectContext";
 import { fetchTasks } from "../units/network";
 
 const GROUPS = [
@@ -11,6 +13,8 @@ const GROUPS = [
 const Tasks = () => {
   const [tasks, setTasks] = useState([]);
   const [draggedTaskId, setDraggedTaskId] = useState(null);
+
+  const { selectedProject } = useProject();
 
   useEffect(() => {
     const controller = new AbortController();
@@ -41,9 +45,8 @@ const Tasks = () => {
         ),
       );
 
-      // Если нужно сохранять изменение статуса на backend
       try {
-        await fetch(`http://localhost:3000/tasks/${draggedTaskId}`, {
+        await fetch(`${import.meta.env.VITE_API_URL}/tasks/${draggedTaskId}`, {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
@@ -59,8 +62,14 @@ const Tasks = () => {
     [draggedTaskId],
   );
 
+  const filteredTasks = useMemo(() => {
+    if (!selectedProject) return [];
+
+    return tasks.filter((task) => task.projectId === selectedProject.id);
+  }, [tasks, selectedProject]);
+
   const tasksByStatus = useMemo(() => {
-    return tasks.reduce(
+    return filteredTasks.reduce(
       (acc, task) => {
         acc[task.status].push(task);
         return acc;
@@ -71,7 +80,7 @@ const Tasks = () => {
         done: [],
       },
     );
-  }, [tasks]);
+  }, [filteredTasks]);
 
   return (
     <div className="grid grid-cols-3 gap-6 p-6">

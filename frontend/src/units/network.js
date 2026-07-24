@@ -22,6 +22,27 @@ const fetchTasks = async (options) => {
   }
 };
 
+const fetchProjects = async (options) => {
+  try {
+    const response = await fetch(
+      `${import.meta.env.VITE_API_URL}/projects`,
+      options,
+    );
+
+    if (!response.ok) {
+      throw new HTTPError(
+        `HTTP error! Status: ${response.status}`,
+        response.status,
+      );
+    }
+
+    const projects = await response.json();
+    return projects;
+  } catch (error) {
+    throw error;
+  }
+};
+
 const fetchProductsByCategory = async (options, categoryId) => {
   try {
     const response = await fetch(
@@ -182,6 +203,7 @@ const isAuthorize = async () => {
 
 export {
   fetchTasks,
+  fetchProjects,
   fetchProductsByCategory,
   fetchCategories,
   fetchOrders,

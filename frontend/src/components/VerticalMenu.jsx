@@ -1,4 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+import { useProject } from "../contexts/ProjectContext";
+import { fetchProjects } from "../units/network";
 
 import category from "../icons/category.svg";
 import messages from "../icons/messages.svg";
@@ -12,18 +15,31 @@ const menuItems = [
   { icon: messages, label: "Messages" },
   { icon: task, label: "Task" },
   { icon: members, label: "Members" },
-  { icon: settings, label: "Settings" },
-];
-
-const projectItems = [
-  { color: "#7AC555", label: "Mobile App" },
-  { color: "#FFA500", label: "Website Redesign" },
-  { color: "#E4CCFD", label: "Design System" },
-  { color: "#76A5EA", label: "Wireframes" },
 ];
 
 const VerticalMenu = () => {
   const [activeItem, setActiveItem] = useState("Home");
+  const [projects, setProjects] = useState([]);
+
+  const { selectedProject, setSelectedProject } = useProject();
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    fetchProjects({ signal: controller.signal })
+      .then((data) => {
+        setProjects(data);
+
+        if (data.length && !selectedProject) {
+          setSelectedProject(data[0]);
+        }
+      })
+      .catch((error) =>
+        console.error("Error fetching projects:", error.message),
+      );
+
+    return () => controller.abort();
+  }, [selectedProject, setSelectedProject]);
 
   return (
     <aside className="border-r border-[#DBDBDB] px-4 py-6">
@@ -35,7 +51,7 @@ const VerticalMenu = () => {
             <li
               key={label}
               onClick={() => setActiveItem(label)}
-              className={`p-2 flex items-center gap-1 cursor-pointer rounded-md transition-colors duration-200 ${
+              className={`flex cursor-pointer items-center gap-2 rounded-md p-2 transition-colors duration-200 ${
                 isActive ? "bg-[#F1EEFC]" : "hover:bg-[#F1EEFC]"
               }`}
             >
@@ -58,24 +74,24 @@ const VerticalMenu = () => {
           MY PROJECTS
         </p>
 
-        <img src={addSquare} alt="Add project" />
+        <img src={addSquare} alt="Add project" className="cursor-pointer" />
       </div>
 
       <ul className="flex flex-col gap-2">
-        {projectItems.map(({ color, label }) => {
-          const isActive = activeItem === label;
+        {projects.map((project) => {
+          const isActive = selectedProject?.id === project.id;
 
           return (
             <li
-              key={label}
-              onClick={() => setActiveItem(label)}
-              className={`p-2 flex items-center gap-2 cursor-pointer rounded-md transition-colors duration-200 ${
+              key={project.id}
+              onClick={() => setSelectedProject(project)}
+              className={`flex cursor-pointer items-center gap-2 rounded-md p-2 transition-colors duration-200 ${
                 isActive ? "bg-[#F1EEFC]" : "hover:bg-[#F1EEFC]"
               }`}
             >
               <div
                 className="h-2 w-2 rounded-full"
-                style={{ backgroundColor: color }}
+                style={{ backgroundColor: project.color }}
               />
 
               <span
@@ -83,7 +99,7 @@ const VerticalMenu = () => {
                   isActive ? "font-semibold text-[#0D062D]" : "text-[#787486]"
                 }`}
               >
-                {label}
+                {project.title}
               </span>
             </li>
           );
