@@ -1,11 +1,7 @@
 import express from "express";
-import "./models/associations.js";
-import categoryRouter from "./routes/categoryRouter.js";
-import orderRouter from "./routes/orderRouter.js";
-import productRouter from "./routes/productRouter.js";
 import userRouter from "./routes/userRouter.js";
 import authRouter from "./routes/authRouter.js";
-import productCategoryRouter from "./routes/productCategoryRouter.js";
+import taskRouter from "./routes/taskRouter.js";
 import cors from "cors";
 import { errorHandler } from "./middleware/errorHandler.js";
 
@@ -22,14 +18,10 @@ app.use(
   })
 );
 
-app.use("/img", express.static("img"));
+app.use("/tasks", taskRouter);
 
-app.use("/categories", categoryRouter);
-app.use("/orders", orderRouter);
-app.use("/products", productRouter);
 app.use("/users", userRouter);
 app.use("/auth", authRouter);
-app.use("/products/category", productCategoryRouter);
 
 app.use(errorHandler);
 

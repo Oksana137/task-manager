@@ -1,21 +1,23 @@
 import HTTPError from "./HTTPError";
 
-const fetchProducts = async (options) => {
+const fetchTasks = async (options) => {
   try {
     const response = await fetch(
-      `${import.meta.env.VITE_API_URL}/products`,
-      options
+      `${import.meta.env.VITE_API_URL}/tasks`,
+      options,
     );
+
     if (!response.ok) {
       throw new HTTPError(
         `HTTP error! Status: ${response.status}`,
-        response.status
+        response.status,
       );
     }
-    const products = await response.json();
-    return products;
+
+    const tasks = await response.json();
+    return tasks;
   } catch (error) {
-    // console.error("Error fetching products:", error.message);
+    // console.error("Error fetching tasks:", error.message);
     throw error;
   }
 };
@@ -179,7 +181,7 @@ const isAuthorize = async () => {
 };
 
 export {
-  fetchProducts,
+  fetchTasks,
   fetchProductsByCategory,
   fetchCategories,
   fetchOrders,
