@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 import TasksGroup from "../components/TasksGroup";
 import { useProject } from "../contexts/ProjectContext";
-import { fetchTasks } from "../units/network";
+import { useTasks } from "../contexts/TasksContext";
 
 const GROUPS = [
   { title: "To Do", status: "to do" },
@@ -11,20 +11,10 @@ const GROUPS = [
 ];
 
 const Tasks = () => {
-  const [tasks, setTasks] = useState([]);
-  const [draggedTaskId, setDraggedTaskId] = useState(null);
-
+  const { tasks, setTasks } = useTasks();
   const { selectedProject } = useProject();
 
-  useEffect(() => {
-    const controller = new AbortController();
-
-    fetchTasks({ signal: controller.signal })
-      .then((data) => setTasks(data))
-      .catch((error) => console.error("Error fetching tasks:", error.message));
-
-    return () => controller.abort();
-  }, []);
+  const [draggedTaskId, setDraggedTaskId] = useState(null);
 
   const handleDragStart = useCallback((taskId) => {
     setDraggedTaskId(taskId);
@@ -36,12 +26,7 @@ const Tasks = () => {
 
       setTasks((prev) =>
         prev.map((task) =>
-          task.id === draggedTaskId
-            ? {
-                ...task,
-                status,
-              }
-            : task,
+          task.id === draggedTaskId ? { ...task, status } : task,
         ),
       );
 
@@ -59,7 +44,7 @@ const Tasks = () => {
 
       setDraggedTaskId(null);
     },
-    [draggedTaskId],
+    [draggedTaskId, setTasks],
   );
 
   const filteredTasks = useMemo(() => {

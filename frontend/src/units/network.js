@@ -1,11 +1,26 @@
 import HTTPError from "./HTTPError";
 
-const fetchTasks = async (options) => {
+const API_URL = import.meta.env.VITE_API_URL;
+
+const getAuthHeaders = () => {
+  const token = localStorage.getItem("token");
+
+  return token
+    ? {
+        Authorization: `Bearer ${token}`,
+      }
+    : {};
+};
+
+const fetchTasks = async (options = {}) => {
   try {
-    const response = await fetch(
-      `${import.meta.env.VITE_API_URL}/tasks`,
-      options,
-    );
+    const response = await fetch(`${API_URL}/tasks`, {
+      ...options,
+      headers: {
+        ...getAuthHeaders(),
+        ...(options.headers || {}),
+      },
+    });
 
     if (!response.ok) {
       throw new HTTPError(
@@ -14,20 +29,21 @@ const fetchTasks = async (options) => {
       );
     }
 
-    const tasks = await response.json();
-    return tasks;
+    return await response.json();
   } catch (error) {
-    // console.error("Error fetching tasks:", error.message);
     throw error;
   }
 };
 
-const fetchProjects = async (options) => {
+const fetchProjects = async (options = {}) => {
   try {
-    const response = await fetch(
-      `${import.meta.env.VITE_API_URL}/projects`,
-      options,
-    );
+    const response = await fetch(`${API_URL}/projects`, {
+      ...options,
+      headers: {
+        ...getAuthHeaders(),
+        ...(options.headers || {}),
+      },
+    });
 
     if (!response.ok) {
       throw new HTTPError(
@@ -36,125 +52,67 @@ const fetchProjects = async (options) => {
       );
     }
 
-    const projects = await response.json();
-    return projects;
+    return await response.json();
   } catch (error) {
     throw error;
   }
 };
 
-const fetchProductsByCategory = async (options, categoryId) => {
+const createTask = async (task) => {
   try {
-    const response = await fetch(
-      `${import.meta.env.VITE_API_URL}/products/category/${categoryId}`,
-      options
-    );
-    if (!response.ok) {
-      throw new HTTPError(
-        `HTTP error! Status: ${response.status}`,
-        response.status
-      );
-    }
-    const products = await response.json();
-    return products;
-  } catch (error) {
-    // console.error("Error fetching products by category:", error.message);
-    throw error;
-  }
-};
+    const response = await fetch(`${API_URL}/tasks`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...getAuthHeaders(),
+      },
+      body: JSON.stringify(task),
+    });
 
-const fetchCategories = async (options) => {
-  try {
-    const response = await fetch(
-      `${import.meta.env.VITE_API_URL}/categories`,
-      options
-    );
     if (!response.ok) {
-      throw new HTTPError(
-        `HTTP error! Status: ${response.status}`,
-        response.status
-      );
-    }
-    const categories = await response.json();
-    return categories;
-  } catch (error) {
-    // console.error("Error fetching categories:", error.message);
-    throw error;
-  }
-};
+      const message = await response.text();
 
-const fetchOrders = async (options) => {
-  try {
-    const response = await fetch(
-      `${import.meta.env.VITE_API_URL}/orders`,
-      options
-    );
-    if (!response.ok) {
       throw new HTTPError(
-        `HTTP error! Status: ${response.status}`,
-        response.status
+        message || `HTTP error! Status: ${response.status}`,
+        response.status,
       );
     }
-    const orders = await response.json();
-    return orders;
-  } catch (error) {
-    // console.error("Error fetching orders:", error.message);
-    throw error;
-  }
-};
 
-const createOrder = async (options) => {
-  try {
-    const response = await fetch(
-      `${import.meta.env.VITE_API_URL}/orders`,
-      options
-    );
-    if (!response.ok) {
-      throw new HTTPError(
-        `HTTP error! Status: ${response.status}`,
-        response.status
-      );
-    }
-    const result = await response.json();
-    return result;
+    return await response.json();
   } catch (error) {
-    // console.error("Error creating order:", error.message);
     throw error;
   }
 };
 
 const registrate = async (regData) => {
   try {
-    const response = await fetch(
-      `${import.meta.env.VITE_API_URL}/auth/register`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(regData),
-      }
-    );
+    const response = await fetch(`${API_URL}/auth/register`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(regData),
+    });
 
     if (!response.ok) {
       throw new HTTPError(
         `HTTP error! Status: ${response.status}`,
-        response.status
+        response.status,
       );
     }
 
-    const data = await response.json();
-    console.log("Registration successful:", data);
+    await response.json();
+
     return true;
   } catch (error) {
-    console.error("Error occurred during registration:", error.message);
+    console.error("Registration error:", error.message);
     throw error;
   }
 };
 
 const authorize = async (authData) => {
   try {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
+    const response = await fetch(`${API_URL}/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -165,38 +123,49 @@ const authorize = async (authData) => {
     if (!response.ok) {
       throw new HTTPError(
         `HTTP error! Status: ${response.status}`,
-        response.status
+        response.status,
       );
     }
 
     const data = await response.json();
+
     localStorage.setItem("token", data.token);
+
     return true;
   } catch (error) {
-    console.error("Error occurred during authorization:", error.message);
+    console.error("Authorization error:", error.message);
     throw error;
   }
 };
 
 const isAuthorize = async () => {
   try {
-    if (!localStorage.getItem("token")) return false;
+    const token = localStorage.getItem("token");
 
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/me`, {
+    if (!token) {
+      return false;
+    }
+
+    const response = await fetch(`${API_URL}/auth/me`, {
       method: "GET",
       headers: {
-        "Content-Type": "application/json",
-        authorization: localStorage.getItem("token"),
+        Authorization: `Bearer ${token}`,
       },
     });
 
-    if (response.status == 401) {
+    if (response.status === 401) {
       return false;
+    }
+
+    if (!response.ok) {
+      throw new HTTPError(
+        `HTTP error! Status: ${response.status}`,
+        response.status,
+      );
     }
 
     return true;
   } catch (error) {
-    // console.error("Authentication failed.", error);
     throw error;
   }
 };
@@ -204,10 +173,7 @@ const isAuthorize = async () => {
 export {
   fetchTasks,
   fetchProjects,
-  fetchProductsByCategory,
-  fetchCategories,
-  fetchOrders,
-  createOrder,
+  createTask,
   registrate,
   authorize,
   isAuthorize,

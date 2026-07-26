@@ -8,7 +8,7 @@ const Task = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    text: {
+    description: {
       type: DataTypes.STRING,
       allowNull: false,
     },

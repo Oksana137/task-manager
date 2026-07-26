@@ -1,5 +1,7 @@
 import addSquare from "../icons/add_square.svg";
 import Task from "./Task";
+import AddTask from "./AddTask";
+import { useState } from "react";
 
 const BORDER_COLORS = {
   "To Do": "#5030E5",
@@ -8,6 +10,9 @@ const BORDER_COLORS = {
 };
 
 const TasksGroup = ({ title, status, tasks, onDrop, onDragStart }) => {
+
+  const [isAddTaskOpen, setIsAddTaskOpen] = useState(false);
+
   const handleDragOver = (e) => {
     e.preventDefault();
   };
@@ -33,10 +38,25 @@ const TasksGroup = ({ title, status, tasks, onDrop, onDragStart }) => {
         </div>
 
         {title === "To Do" && (
-          <button type="button">
+          <button
+            type="button"
+            onClick={() => setIsAddTaskOpen(true)}
+            className="rounded-md p-1 transition hover:bg-gray-100"
+          >
             <img src={addSquare} alt="Add task" />
           </button>
         )}
+
+        <AddTask
+          open={isAddTaskOpen}
+          onClose={() => setIsAddTaskOpen(false)}
+          onCreate={(task) => {
+            console.log(task);
+
+            // здесь можно добавить задачу в state
+            // addTask(task);
+          }}
+        />
       </header>
 
       <div className="mt-5 flex flex-col gap-4">

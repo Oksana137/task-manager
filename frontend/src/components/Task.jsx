@@ -57,7 +57,7 @@ const Task = ({ task, onDragStart }) => {
         {task.title}
       </h3>
 
-      <p className="text-sm text-[#787486]">{task.text}</p>
+      <p className="text-sm text-[#787486]">{task.description}</p>
     </article>
   );
 };
