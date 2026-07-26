@@ -3,7 +3,7 @@ import { fetchProjects, createTask } from "../units/network";
 import { useProject } from "../contexts/ProjectContext";
 import { useTasks } from "../contexts/TasksContext";
 
-const statuses = ["To Do", "In Progress", "Done"];
+const statuses = ["To Do", "On Progress", "Done"];
 const priorities = ["Low", "High"];
 
 const AddTask = ({ open, onClose, onCreate }) => {
