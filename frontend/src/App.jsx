@@ -10,6 +10,7 @@ import { TasksProvider } from "./contexts/TasksContext";
 import MainLayout from "./layouts/MainLayout";
 import ProtectedLayout from "./layouts/ProtectedLayout";
 import Tasks from "./pages/Tasks";
+import TasksList from "./pages/TasksList";
 // import SignIn from "./pages/SignIn";
 // import SignUp from "./pages/SignUp";
 
@@ -18,6 +19,7 @@ function App() {
     createRoutesFromElements(
       <Route path="/" element={<MainLayout />}>
         <Route index element={<Tasks />} />
+        <Route path="/tasks-list" element={<TasksList />} />
       </Route>,
     ),
   );

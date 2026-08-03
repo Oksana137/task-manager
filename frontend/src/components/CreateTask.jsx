@@ -6,7 +6,7 @@ import { useTasks } from "../contexts/TasksContext";
 const statuses = ["To Do", "On Progress", "Done"];
 const priorities = ["Low", "High"];
 
-const AddTask = ({ open, onClose, onCreate }) => {
+const CreateTask = ({ open, onClose, onCreate }) => {
   const { selectedProject } = useProject();
   const { setTasks } = useTasks();
 
@@ -207,4 +207,4 @@ const AddTask = ({ open, onClose, onCreate }) => {
   );
 };
 
-export default AddTask;
+export default CreateTask;
