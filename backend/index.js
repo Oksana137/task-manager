@@ -15,9 +15,9 @@ app.use(express.json());
 app.use(
   cors({
     origin: process.env.FRONTEND_URI,
-    methods: ["GET", "POST"],
+    methods: ["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
     credentials: true,
-  })
+  }),
 );
 
 app.use("/tasks", taskRouter);

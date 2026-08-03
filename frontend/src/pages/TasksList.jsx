@@ -34,7 +34,7 @@ const TasksPage = () => {
       </div>
 
       <div className="w-1/2">
-        <TaskDetail task={currentTask} />
+        <TaskDetail task={currentTask} setTasks={setTasks} />
       </div>
     </div>
   );
