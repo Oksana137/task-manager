@@ -23,6 +23,7 @@ const TasksGroup = ({ title, status, tasks, onDrop, onDragStart }) => {
       onDrop={() => onDrop(status)}
       className="min-h-[600px] rounded-2xl bg-[#F5F5F5] p-4"
     >
+      {/* Header */}
       <header
         className="flex items-center justify-between border-b-[3px] pb-4"
         style={{
@@ -56,6 +57,7 @@ const TasksGroup = ({ title, status, tasks, onDrop, onDragStart }) => {
         />
       </header>
 
+      {/* Tasks */}
       <div className="mt-5 flex flex-col gap-4">
         {tasks.map((task) => (
           <Task key={task.id} task={task} onDragStart={onDragStart} />

@@ -1,5 +1,7 @@
 import { memo } from "react";
 
+import messages from "../icons/messages.svg";
+
 const getBadge = ({ status, priority }) => {
   if (status === "done") {
     return {
@@ -41,6 +43,7 @@ const Task = ({ task, onDragStart }) => {
         hover:shadow-md
       "
     >
+      {/* Badge */}
       <div className="mb-3">
         <span
           className="rounded px-2 py-1 text-xs font-medium"
@@ -53,11 +56,19 @@ const Task = ({ task, onDragStart }) => {
         </span>
       </div>
 
+      {/* Title */}
       <h3 className="mb-2 text-lg font-semibold text-[#0D062D]">
         {task.title}
       </h3>
 
+      {/* Description */}
       <p className="text-sm text-[#787486]">{task.description}</p>
+
+      {/* Meta */}
+      <div className="mt-8 flex items-center justify-end gap-2 text-sm text-[#787486]">
+        <img src={messages} alt="comments" className="h-4 w-4 opacity-70" />
+        {task.commentsNumber ?? 0} comments
+      </div>
     </article>
   );
 };
