@@ -1,4 +1,5 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 import TasksList from "../components/TasksList";
 import TaskDetail from "../components/TaskDetail";
@@ -9,6 +10,7 @@ import { useTasks } from "../contexts/TasksContext";
 const TasksPage = () => {
   const { tasks, setTasks } = useTasks();
   const { selectedProject } = useProject();
+  const location = useLocation();
 
   const filteredTasks = useMemo(() => {
     if (!selectedProject) return [];
@@ -17,6 +19,16 @@ const TasksPage = () => {
   }, [tasks, selectedProject]);
 
   const [selectedTask, setSelectedTask] = useState(null);
+
+  useEffect(() => {
+    const taskId = location.state?.taskId;
+
+    if (!taskId) return;
+
+    const task = tasks.find((t) => t.id === taskId);
+
+    if (task) setSelectedTask(task);
+  }, [location.state, tasks]);
 
   const currentTask =
     filteredTasks.find((task) => task.id === selectedTask?.id) ||
