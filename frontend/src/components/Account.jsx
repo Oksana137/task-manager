@@ -10,7 +10,7 @@ const Account = () => {
     <div className="flex items-center gap-3">
       <div className="hidden text-right sm:block">
         <p className="font-semibold text-[#0D062D]">
-          {user?.name ?? user?.email ?? "Guest"}
+          {user?.name ?? user?.email}
         </p>
 
         {user?.city && <p className="text-sm text-[#787486]">{user.city}</p>}
@@ -46,7 +46,7 @@ const Account = () => {
 
             <div className="min-w-0">
               <p className="truncate text-sm font-semibold text-[#0D062D]">
-                {user?.name ?? "Guest"}
+                {user?.name}
               </p>
               <p className="truncate text-xs text-[#787486]">
                 {[user?.city, user?.email].filter(Boolean).join(" · ")}
