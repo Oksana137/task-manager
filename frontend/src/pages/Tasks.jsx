@@ -1,8 +1,8 @@
 import { useCallback, useMemo, useState } from "react";
 
 import TasksGroup from "../components/TasksGroup";
-import { useProject } from "../contexts/ProjectContext";
 import { useTasks } from "../contexts/TasksContext";
+import { useProjectTasks } from "../hooks/useProjectTasks";
 
 const GROUPS = [
   { title: "To Do", status: "to do" },
@@ -11,8 +11,8 @@ const GROUPS = [
 ];
 
 const Tasks = () => {
-  const { tasks, setTasks } = useTasks();
-  const { selectedProject } = useProject();
+  const { setTasks } = useTasks();
+  const filteredTasks = useProjectTasks();
 
   const [draggedTaskId, setDraggedTaskId] = useState(null);
 
@@ -46,12 +46,6 @@ const Tasks = () => {
     },
     [draggedTaskId, setTasks],
   );
-
-  const filteredTasks = useMemo(() => {
-    if (!selectedProject) return [];
-
-    return tasks.filter((task) => task.projectId === selectedProject.id);
-  }, [tasks, selectedProject]);
 
   const tasksByStatus = useMemo(() => {
     return filteredTasks.reduce(

@@ -3,8 +3,12 @@ import ErrorResponse from "../utils/ErrorResponse.js";
 
 const verifyToken = async (req, res, next) => {
   try {
-  const token = req.headers["authorization"];
-  if (!token) throw new ErrorResponse("Authentication failed. Please log in.", 401);
+  const authHeader = req.headers["authorization"];
+  if (!authHeader) throw new ErrorResponse("Authentication failed. Please log in.", 401);
+
+  const token = authHeader.startsWith("Bearer ")
+    ? authHeader.slice(7)
+    : authHeader;
 
   const decoded = jwt.verify(token, process.env.JWT_SECRET);
   req.uid = decoded.uid;

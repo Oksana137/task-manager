@@ -10,7 +10,7 @@ const menuIcons = [
   { src: notification, alt: "notification" },
 ];
 
-const HorisontalMenu = () => {
+const HorizontalMenu = () => {
   return (
     <div className="border-b border-[#DBDBDB] px-8 py-6">
       <div className="flex flex-wrap items-center gap-x-4 gap-y-4">
@@ -34,4 +34,4 @@ const HorisontalMenu = () => {
   );
 };
 
-export default HorisontalMenu;
+export default HorizontalMenu;

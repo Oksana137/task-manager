@@ -8,6 +8,7 @@ const SignUp = () => {
       redirectPath="/login"
       apiCall={registrate}
       regLink={false}
+      showProfileFields={true}
     />
   );
 };

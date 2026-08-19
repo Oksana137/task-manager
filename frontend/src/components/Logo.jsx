@@ -1,10 +1,7 @@
-import { Link } from "react-router-dom";
-import { useState, useContext } from "react";
-import search from "../icons/search.svg";
 import colorfilter from "../icons/colorfilter.svg";
 import arrows from "../icons/arrows.svg";
 
-const Home = () => {
+const Logo = () => {
   return (
     <div className="h-full px-4 py-6 border-b-[1px] border-r-[1px] border-[#DBDBDB] flex items-center">
       <div className="flex gap-14">
@@ -18,4 +15,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Logo;

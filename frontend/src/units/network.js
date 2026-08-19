@@ -138,36 +138,30 @@ const authorize = async (authData) => {
   }
 };
 
-const isAuthorize = async () => {
-  try {
-    const token = localStorage.getItem("token");
+const fetchCurrentUser = async () => {
+  const token = localStorage.getItem("token");
 
-    if (!token) {
-      return false;
-    }
-
-    const response = await fetch(`${API_URL}/auth/me`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (response.status === 401) {
-      return false;
-    }
-
-    if (!response.ok) {
-      throw new HTTPError(
-        `HTTP error! Status: ${response.status}`,
-        response.status,
-      );
-    }
-
-    return true;
-  } catch (error) {
-    throw error;
+  if (!token) {
+    return null;
   }
+
+  const response = await fetch(`${API_URL}/auth/me`, {
+    method: "GET",
+    headers: getAuthHeaders(),
+  });
+
+  if (response.status === 401) {
+    return null;
+  }
+
+  if (!response.ok) {
+    throw new HTTPError(
+      `HTTP error! Status: ${response.status}`,
+      response.status,
+    );
+  }
+
+  return await response.json();
 };
 
 export {
@@ -176,5 +170,5 @@ export {
   createTask,
   registrate,
   authorize,
-  isAuthorize,
+  fetchCurrentUser,
 };

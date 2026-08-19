@@ -10,17 +10,24 @@ import { TasksProvider } from "./contexts/TasksContext";
 import MainLayout from "./layouts/MainLayout";
 import ProtectedLayout from "./layouts/ProtectedLayout";
 import Tasks from "./pages/Tasks";
-import TasksList from "./pages/TasksList";
-// import SignIn from "./pages/SignIn";
-// import SignUp from "./pages/SignUp";
+import TasksPage from "./pages/TasksPage";
+import SignIn from "./pages/SignIn";
+import SignUp from "./pages/SignUp";
 
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route path="/" element={<MainLayout />}>
-        <Route index element={<Tasks />} />
-        <Route path="/tasks-list" element={<TasksList />} />
-      </Route>,
+      <>
+        <Route path="/login" element={<SignIn />} />
+        <Route path="/register" element={<SignUp />} />
+
+        <Route element={<ProtectedLayout />}>
+          <Route path="/" element={<MainLayout />}>
+            <Route index element={<Tasks />} />
+            <Route path="/tasks-list" element={<TasksPage />} />
+          </Route>
+        </Route>
+      </>,
     ),
   );
 

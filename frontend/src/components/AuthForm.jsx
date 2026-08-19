@@ -2,15 +2,22 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../contexts/AuthContext";
-import { isAuthorize } from "../units/network";
 
-const AuthForm = ({ buttonText, redirectPath, apiCall, regLink }) => {
+const AuthForm = ({
+  buttonText,
+  redirectPath,
+  apiCall,
+  regLink,
+  showProfileFields = false,
+}) => {
   const navigate = useNavigate();
-  const { setIsAuth } = useContext(AuthContext);
+  const { loadUser } = useContext(AuthContext);
 
   const [formData, setFormData] = useState({
     email: "",
     password: "",
+    name: "",
+    city: "",
   });
 
   const [errors, setErrors] = useState({
@@ -67,9 +74,7 @@ const AuthForm = ({ buttonText, redirectPath, apiCall, regLink }) => {
     try {
       await apiCall(formData);
 
-      isAuthorize().then((status) => {
-        setIsAuth(status);
-      });
+      await loadUser();
 
       navigate(redirectPath);
     } catch (error) {
@@ -79,6 +84,32 @@ const AuthForm = ({ buttonText, redirectPath, apiCall, regLink }) => {
 
   return (
     <form className="card flex flex-col gap-6 p-8 w-96 bg-base-100 shadow-xl absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+      {showProfileFields && (
+        <>
+          <label className="input input-bordered flex items-center">
+            <input
+              type="text"
+              name="name"
+              className="grow"
+              placeholder="Name"
+              value={formData.name}
+              onChange={handleChange}
+            />
+          </label>
+
+          <label className="input input-bordered flex items-center">
+            <input
+              type="text"
+              name="city"
+              className="grow"
+              placeholder="City"
+              value={formData.city}
+              onChange={handleChange}
+            />
+          </label>
+        </>
+      )}
+
       <div className="flex flex-col">
         <label className="input input-bordered flex items-center">
           <svg

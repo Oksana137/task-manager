@@ -1,24 +1,7 @@
 import { useEffect, useState } from "react";
 
 import messages from "../icons/messages.svg";
-
-const statusColors = {
-  "to do": "bg-red-100 text-red-600",
-  "on progress": "bg-yellow-100 text-yellow-600",
-  done: "bg-green-100 text-green-600",
-};
-
-const statusDots = {
-  "to do": "bg-red-500",
-  "on progress": "bg-yellow-500",
-  done: "bg-green-500",
-};
-
-const statusNames = {
-  "to do": "To Do",
-  "on progress": "On Progress",
-  done: "Completed",
-};
+import { statusColors, statusDots, statusNames } from "../units/taskDisplay";
 
 const TaskDetail = ({ task, setTasks }) => {
   const [isEditing, setIsEditing] = useState(false);

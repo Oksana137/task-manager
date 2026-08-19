@@ -3,18 +3,19 @@ import { deleteToken } from "../units/storage";
 import { AuthContext } from "../contexts/AuthContext";
 import { useContext } from "react";
 
-const Logout = () => {
+const Logout = ({ className = "btn btn-ghost" }) => {
   const navigate = useNavigate();
-  const { setIsAuth } = useContext(AuthContext);
+  const { setIsAuth, setUser } = useContext(AuthContext);
 
   const handleLogout = () => {
     deleteToken();
     setIsAuth(false);
+    setUser(null);
     navigate("/login");
   };
 
   return (
-    <button onClick={handleLogout} className="btn btn-ghost">
+    <button onClick={handleLogout} className={className}>
       Log out
     </button>
   );

@@ -1,18 +1,7 @@
 import { useEffect, useState } from "react";
 
 import CreateTask from "./CreateTask";
-
-const statusColors = {
-  "to do": "bg-red-100 text-red-600",
-  "on progress": "bg-yellow-100 text-yellow-600",
-  done: "bg-green-100 text-green-600",
-};
-
-const statusNames = {
-  "to do": "To Do",
-  "on progress": "On Progress",
-  done: "Completed",
-};
+import { statusColors, statusNames } from "../units/taskDisplay";
 
 const TasksList = ({ tasks, currentTask, setCurrentTask }) => {
   const [isCreateTaskOpen, setIsCreateTaskOpen] = useState(false);

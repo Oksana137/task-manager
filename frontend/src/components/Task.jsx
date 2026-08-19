@@ -1,33 +1,10 @@
 import { memo } from "react";
 
 import messages from "../icons/messages.svg";
-
-const getBadge = ({ status, priority }) => {
-  if (status === "done") {
-    return {
-      text: "Completed",
-      textColor: "#68B266",
-      bgColor: "rgba(104,178,102,0.2)",
-    };
-  }
-
-  if (priority === "high") {
-    return {
-      text: "High",
-      textColor: "#D8727D",
-      bgColor: "rgba(216,114,125,0.1)",
-    };
-  }
-
-  return {
-    text: "Low",
-    textColor: "#D58D49",
-    bgColor: "rgba(213,141,73,0.2)",
-  };
-};
+import { getTaskBadge } from "../units/taskDisplay";
 
 const Task = ({ task, onDragStart }) => {
-  const badge = getBadge(task);
+  const badge = getTaskBadge(task);
 
   return (
     <article

@@ -6,7 +6,7 @@ import jwt from "jsonwebtoken";
 // REGISTER
 export const signUp = async (req, res, next) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, name, city } = req.body;
 
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser)
@@ -16,8 +16,10 @@ export const signUp = async (req, res, next) => {
     const newUser = await User.create({
       email,
       password: hash,
+      name,
+      city,
     });
-    const token = jwt.sign({ uid: newUser._id }, process.env.JWT_SECRET);
+    const token = jwt.sign({ uid: newUser.id }, process.env.JWT_SECRET);
     res.status(201).send({ token });
   } catch (err) {
     next(err);
@@ -45,6 +47,14 @@ export const signIn = async (req, res, next) => {
 };
 
 export const getUser = async (req, res, next) => {
-  const user = await User.findByPk(req.uid);
-  res.json(user);
+  try {
+    const user = await User.findByPk(req.uid, {
+      attributes: { exclude: ["password"] },
+    });
+    if (!user) throw new ErrorResponse("User not found", 404);
+
+    res.json(user);
+  } catch (err) {
+    next(err);
+  }
 };

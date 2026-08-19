@@ -1,13 +1,13 @@
 import { Outlet } from "react-router-dom";
-import HorisontalMenu from "../components/HorisontalMenu";
+import HorizontalMenu from "../components/HorizontalMenu";
 import VerticalMenu from "../components/VerticalMenu";
-import Home from "../components/Home";
+import Logo from "../components/Logo";
 
 const MainLayout = () => {
   return (
       <div className="grid grid-cols-[auto_1fr] grid-rows-[auto_1fr]">
-        <Home />
-        <HorisontalMenu />
+        <Logo />
+        <HorizontalMenu />
         <VerticalMenu />
         <Outlet />
       </div>

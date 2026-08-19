@@ -1,22 +1,16 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
 import TasksList from "../components/TasksList";
 import TaskDetail from "../components/TaskDetail";
 
-import { useProject } from "../contexts/ProjectContext";
 import { useTasks } from "../contexts/TasksContext";
+import { useProjectTasks } from "../hooks/useProjectTasks";
 
 const TasksPage = () => {
   const { tasks, setTasks } = useTasks();
-  const { selectedProject } = useProject();
+  const filteredTasks = useProjectTasks();
   const location = useLocation();
-
-  const filteredTasks = useMemo(() => {
-    if (!selectedProject) return [];
-
-    return tasks.filter((task) => task.projectId === selectedProject.id);
-  }, [tasks, selectedProject]);
 
   const [selectedTask, setSelectedTask] = useState(null);
 

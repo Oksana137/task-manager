@@ -6,6 +6,7 @@ import projectRouter from "./routes/projectRouter.js";
 import "./models/associations.js";
 import cors from "cors";
 import { errorHandler } from "./middleware/errorHandler.js";
+import User from "./models/User.js";
 
 const app = express();
 const port = 3000;
@@ -28,6 +29,13 @@ app.use("/auth", authRouter);
 
 app.use(errorHandler);
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+User.sync({ alter: true })
+  .then(() => {
+    app.listen(port, () => {
+      console.log(`Server is running on port ${port}`);
+    });
+  })
+  .catch((error) => {
+    console.error("Failed to sync User table:", error);
+    process.exit(1);
+  });
