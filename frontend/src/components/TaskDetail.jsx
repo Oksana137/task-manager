@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 import messages from "../icons/messages.svg";
 import { statusColors, statusDots, statusNames } from "../units/taskDisplay";
+import { updateTask } from "../units/network";
 
 const TaskDetail = ({ task, setTasks }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -65,23 +66,7 @@ const TaskDetail = ({ task, setTasks }) => {
     setIsSaving(true);
 
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/tasks/${task.id}`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(form),
-        },
-      );
-
-      if (!response.ok) {
-        const message = await response.text();
-        throw new Error(message || "Failed to update task");
-      }
-
-      const updatedTask = await response.json();
+      const updatedTask = await updateTask(task.id, form);
 
       setTasks((prev) =>
         prev.map((t) => (t.id === updatedTask.id ? updatedTask : t)),

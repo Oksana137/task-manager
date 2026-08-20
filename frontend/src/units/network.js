@@ -107,6 +107,32 @@ const createTask = async (task) => {
   }
 };
 
+const updateTask = async (id, updates) => {
+  try {
+    const response = await fetch(`${API_URL}/tasks/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        ...getAuthHeaders(),
+      },
+      body: JSON.stringify(updates),
+    });
+
+    if (!response.ok) {
+      const message = await response.text();
+
+      throw new HTTPError(
+        message || `HTTP error! Status: ${response.status}`,
+        response.status,
+      );
+    }
+
+    return await response.json();
+  } catch (error) {
+    throw error;
+  }
+};
+
 const registrate = async (regData) => {
   try {
     const response = await fetch(`${API_URL}/auth/register`, {
@@ -192,6 +218,7 @@ export {
   fetchProjects,
   fetchProjectMembers,
   createTask,
+  updateTask,
   registrate,
   authorize,
   fetchCurrentUser,

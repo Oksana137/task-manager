@@ -1,8 +1,10 @@
 import { useCallback, useMemo, useState } from "react";
 
 import TasksGroup from "../components/TasksGroup";
+
 import { useTasks } from "../contexts/TasksContext";
 import { useProjectTasks } from "../hooks/useProjectTasks";
+import { updateTask } from "../units/network";
 
 const GROUPS = [
   { title: "To Do", status: "to do" },
@@ -31,13 +33,7 @@ const TasksGroupPage = () => {
       );
 
       try {
-        await fetch(`${import.meta.env.VITE_API_URL}/tasks/${draggedTaskId}`, {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ status }),
-        });
+        await updateTask(draggedTaskId, { status });
       } catch (error) {
         console.error("Failed to update task:", error);
       }
