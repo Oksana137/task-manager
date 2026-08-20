@@ -4,6 +4,7 @@ import { fetchProjectMembers } from "../units/network";
 import { useProject } from "../contexts/ProjectContext";
 import AvatarIcon from "../components/AvatarIcon";
 import NoProjects from "../components/NoProjects";
+import MembersHeader from "../components/MembersHeader";
 
 const MembersPage = () => {
   const { selectedProject, projects, projectsLoaded } = useProject();
@@ -34,15 +35,12 @@ const MembersPage = () => {
 
   return (
     <div className="flex h-full flex-col overflow-y-auto bg-[#F8F9FD]">
-      <div className="flex items-center gap-3 p-8">
-        <h1 className="text-3xl font-bold text-[#0D062D]">
-          {selectedProject ? `Members of ${selectedProject.title}` : "Members"}
-        </h1>
-
-        <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[#EEEAFD] text-sm font-semibold text-[#625F6D]">
-          {members.length}
-        </div>
-      </div>
+      <MembersHeader
+        title={
+          selectedProject ? `Members of ${selectedProject.title}` : "Members"
+        }
+        count={members.length}
+      />
 
       <div className="mt-6 flex-1 px-8 pb-8">
         {members.length === 0 ? (
