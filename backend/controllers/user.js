@@ -4,7 +4,9 @@ import ErrorResponse from "../utils/ErrorResponse.js";
 // Get all users
 const getUsers = async (req, res, next) => {
   try {
-    const users = await User.findAll();
+    const users = await User.findAll({
+      attributes: { exclude: ["password"] },
+    });
     res.status(200).json(users);
   } catch (err) {
     next(err); // Pass the error to the error-handling middleware

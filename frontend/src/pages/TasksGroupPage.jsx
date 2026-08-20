@@ -10,7 +10,7 @@ const GROUPS = [
   { title: "Done", status: "done" },
 ];
 
-const Tasks = () => {
+const TasksGroupPage = () => {
   const { setTasks } = useTasks();
   const filteredTasks = useProjectTasks();
 
@@ -76,4 +76,4 @@ const Tasks = () => {
   );
 };
 
-export default Tasks;
+export default TasksGroupPage;

@@ -30,19 +30,21 @@ const VerticalMenu = () => {
       .then((data) => {
         setProjects(data);
 
-        if (data.length && !selectedProject) {
-          setSelectedProject(data[0]);
+        if (data.length) {
+          setSelectedProject((prev) => prev ?? data[0]);
         }
       })
-      .catch((error) =>
-        console.error("Error fetching projects:", error.message),
-      );
+      .catch((error) => {
+        if (error.name !== "AbortError") {
+          console.error("Error fetching projects:", error.message);
+        }
+      });
 
     return () => controller.abort();
-  }, [selectedProject, setSelectedProject]);
+  }, [setSelectedProject]);
 
   return (
-    <aside className="border-r border-[#DBDBDB] px-4 py-6">
+    <aside className="h-full border-r border-[#DBDBDB] px-4 py-6">
       <ul className="flex flex-col gap-2 pb-6">
         {menuItems.map(({ icon, label, path }) => (
           <NavLink key={label} to={path}>
