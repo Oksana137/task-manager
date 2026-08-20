@@ -82,17 +82,17 @@ const CreateTask = ({ open, onClose, onCreate }) => {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-[590px] rounded-[24px] bg-white px-10 py-8 shadow-[0_25px_80px_rgba(0,0,0,0.12)]"
+        className="w-full max-w-[590px] rounded-3xl bg-white px-10 py-8 shadow-[0_25px_80px_rgba(0,0,0,0.12)]"
       >
         <div className="mb-8 flex items-center justify-between">
-          <h2 className="text-[18px] font-semibold text-[#1B1B3A]">
+          <h2 className="text-[18px] font-semibold text-[#0D062D]">
             Add New Task
           </h2>
 
           <button
             type="button"
             onClick={onClose}
-            className="text-[30px] leading-none text-[#8A8DA8] transition hover:text-[#4B4E68]"
+            className="text-[30px] leading-none text-gray-400 transition hover:text-gray-600"
           >
             &times;
           </button>
@@ -100,7 +100,7 @@ const CreateTask = ({ open, onClose, onCreate }) => {
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="mb-2 block text-[14px] font-medium text-[#44465F]">
+            <label className="mb-2 block text-[14px] font-medium text-[#787486]">
               Title
             </label>
 
@@ -108,12 +108,12 @@ const CreateTask = ({ open, onClose, onCreate }) => {
               name="title"
               required
               placeholder="e.g. Design Profile Screen"
-              className="h-12 w-full rounded-xl border border-[#E7E8F2] px-4 text-[15px] text-[#1B1B3A] placeholder:text-[#A5A7BE] outline-none transition focus:border-[#6C4CF1]"
+              className="h-12 w-full rounded-xl border border-[#E5E5E5] px-4 text-[15px] text-[#0D062D] placeholder:text-gray-400 outline-none transition focus:border-[#5030E5]"
             />
           </div>
 
           <div>
-            <label className="mb-2 block text-[14px] font-medium text-[#44465F]">
+            <label className="mb-2 block text-[14px] font-medium text-[#787486]">
               Description
             </label>
 
@@ -121,20 +121,20 @@ const CreateTask = ({ open, onClose, onCreate }) => {
               rows={3}
               name="description"
               placeholder="Add task description..."
-              className="w-full resize-none rounded-xl border border-[#E7E8F2] p-4 text-[15px] text-[#1B1B3A] placeholder:text-[#A5A7BE] outline-none transition focus:border-[#6C4CF1]"
+              className="w-full resize-none rounded-xl border border-[#E5E5E5] p-4 text-[15px] text-[#0D062D] placeholder:text-gray-400 outline-none transition focus:border-[#5030E5]"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="mb-2 block text-[14px] font-medium text-[#44465F]">
+              <label className="mb-2 block text-[14px] font-medium text-[#787486]">
                 Status
               </label>
 
               <select
                 name="status"
                 defaultValue="To Do"
-                className="h-12 w-full rounded-xl border border-[#E7E8F2] bg-white px-4 text-[15px] text-[#1B1B3A] outline-none transition focus:border-[#6C4CF1]"
+                className="h-12 w-full rounded-xl border border-[#E5E5E5] bg-white px-4 text-[15px] text-[#0D062D] outline-none transition focus:border-[#5030E5]"
               >
                 {statuses.map((status) => (
                   <option key={status} value={status}>
@@ -145,14 +145,14 @@ const CreateTask = ({ open, onClose, onCreate }) => {
             </div>
 
             <div>
-              <label className="mb-2 block text-[14px] font-medium text-[#44465F]">
+              <label className="mb-2 block text-[14px] font-medium text-[#787486]">
                 Priority
               </label>
 
               <select
                 name="priority"
                 defaultValue="High"
-                className="h-12 w-full rounded-xl border border-[#E7E8F2] bg-white px-4 text-[15px] text-[#1B1B3A] outline-none transition focus:border-[#6C4CF1]"
+                className="h-12 w-full rounded-xl border border-[#E5E5E5] bg-white px-4 text-[15px] text-[#0D062D] outline-none transition focus:border-[#5030E5]"
               >
                 {priorities.map((priority) => (
                   <option key={priority} value={priority}>
@@ -164,7 +164,7 @@ const CreateTask = ({ open, onClose, onCreate }) => {
           </div>
 
           <div>
-            <label className="mb-2 block text-[14px] font-medium text-[#44465F]">
+            <label className="mb-2 block text-[14px] font-medium text-[#787486]">
               Project
             </label>
 
@@ -173,7 +173,7 @@ const CreateTask = ({ open, onClose, onCreate }) => {
               value={selectedProjectId}
               onChange={(e) => setSelectedProjectId(Number(e.target.value))}
               disabled={!projects.length}
-              className="h-12 w-full rounded-xl border border-[#E7E8F2] bg-white px-4 text-[15px] text-[#1B1B3A] outline-none transition focus:border-[#6C4CF1]"
+              className="h-12 w-full rounded-xl border border-[#E5E5E5] bg-white px-4 text-[15px] text-[#0D062D] outline-none transition focus:border-[#5030E5]"
             >
               {!projects.length && <option value={0}>No projects</option>}
 
@@ -189,14 +189,14 @@ const CreateTask = ({ open, onClose, onCreate }) => {
             <button
               type="button"
               onClick={onClose}
-              className="h-11 rounded-xl border border-[#E5E7F2] bg-white px-6 text-[15px] font-medium text-[#44465F] transition hover:bg-gray-50"
+              className="h-11 rounded-xl border border-[#E5E5E5] bg-white px-6 text-[15px] font-medium text-[#787486] transition hover:bg-gray-50"
             >
               Cancel
             </button>
 
             <button
               type="submit"
-              className="h-11 rounded-xl bg-[#6C4CF1] px-6 text-[15px] font-medium text-white transition hover:bg-[#5B3DE6]"
+              className="h-11 rounded-xl bg-[#5030E5] px-6 text-[15px] font-medium text-white transition hover:bg-[#4123D7]"
             >
               Create Task
             </button>

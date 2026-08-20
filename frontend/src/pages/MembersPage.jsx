@@ -31,41 +31,58 @@ const MembersPage = () => {
 
   return (
     <div className="h-full overflow-y-auto bg-[#F8F9FD] p-6">
-      <h1 className="mb-6 text-3xl font-bold text-[#0D062D]">
-        {selectedProject
-          ? `Members of ${selectedProject.title}`
-          : "Members"}
-      </h1>
+      <div className="mb-6 flex items-center gap-3">
+        <h1 className="text-3xl font-bold text-[#0D062D]">
+          {selectedProject
+            ? `Members of ${selectedProject.title}`
+            : "Members"}
+        </h1>
 
-      <div className="grid grid-cols-2 gap-4 min-[900px]:grid-cols-3 min-[1200px]:grid-cols-4">
-        {members.map((member) => (
-          <div
-            key={member.id}
-            className="flex flex-col items-center gap-3 rounded-2xl border border-[#ECECEC] bg-white p-6 text-center shadow-sm"
-          >
-            <div className="avatar">
-              <div className="w-16 rounded-full">
-                <img
-                  src={getAvatarUrl(member)}
-                  alt={member.name || member.email}
-                />
+        <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[#EEEAFD] text-sm font-semibold text-[#625F6D]">
+          {members.length}
+        </div>
+      </div>
+
+      {members.length === 0 ? (
+        <div className="flex h-full max-h-[70%] w-full flex-col items-center justify-center gap-2 rounded-3xl border border-dashed border-[#E5E5E5] bg-white text-gray-400">
+          <p className="text-lg font-medium">No members yet</p>
+          <p className="text-sm">
+            {selectedProject
+              ? "This project has no members assigned"
+              : "Select a project to see its members"}
+          </p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-2 gap-4 min-[900px]:grid-cols-3 min-[1200px]:grid-cols-4">
+          {members.map((member) => (
+            <div
+              key={member.id}
+              className="flex flex-col items-center gap-3 rounded-2xl border border-[#ECECEC] bg-white p-6 text-center shadow-sm"
+            >
+              <div className="avatar">
+                <div className="w-16 rounded-full">
+                  <img
+                    src={getAvatarUrl(member)}
+                    alt={member.name || member.email}
+                  />
+                </div>
+              </div>
+
+              <div className="min-w-0">
+                <p className="truncate font-semibold text-[#0D062D]">
+                  {member.name || member.email}
+                </p>
+
+                {member.city && (
+                  <p className="truncate text-sm text-[#787486]">
+                    {member.city}
+                  </p>
+                )}
               </div>
             </div>
-
-            <div className="min-w-0">
-              <p className="truncate font-semibold text-[#0D062D]">
-                {member.name || member.email}
-              </p>
-
-              {member.city && (
-                <p className="truncate text-sm text-[#787486]">
-                  {member.city}
-                </p>
-              )}
-            </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

@@ -62,16 +62,26 @@ const TasksGroupPage = () => {
   }, [filteredTasks]);
 
   return (
-    <div className="grid grid-cols-3 gap-6 bg-[#F8F9FD] p-6">
-      {GROUPS.map((group) => (
-        <TasksGroup
-          key={group.status}
-          {...group}
-          tasks={tasksByStatus[group.status]}
-          onDrop={handleDrop}
-          onDragStart={handleDragStart}
-        />
-      ))}
+    <div className="h-full overflow-y-auto bg-[#F8F9FD] p-6">
+      <div className="mb-6 flex items-center gap-3">
+        <h1 className="text-3xl font-bold text-[#0D062D]">Tasks</h1>
+
+        <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[#EEEAFD] text-sm font-semibold text-[#625F6D]">
+          {filteredTasks.length}
+        </div>
+      </div>
+
+      <div className="grid grid-cols-3 gap-6">
+        {GROUPS.map((group) => (
+          <TasksGroup
+            key={group.status}
+            {...group}
+            tasks={tasksByStatus[group.status]}
+            onDrop={handleDrop}
+            onDragStart={handleDragStart}
+          />
+        ))}
+      </div>
     </div>
   );
 };
