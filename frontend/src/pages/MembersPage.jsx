@@ -51,7 +51,7 @@ const MembersPage = () => {
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-2 gap-4 min-[900px]:grid-cols-3 min-[1200px]:grid-cols-4">
+        <div className="pt-6 grid grid-cols-2 gap-4 min-[900px]:grid-cols-3 min-[1200px]:grid-cols-4">
           {members.map((member) => (
             <div
               key={member.id}
