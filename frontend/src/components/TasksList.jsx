@@ -1,11 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
-import CreateTask from "./CreateTask";
 import { statusColors, statusNames } from "../units/taskDisplay";
 
 const TasksList = ({ tasks, currentTask, setCurrentTask }) => {
-  const [isCreateTaskOpen, setIsCreateTaskOpen] = useState(false);
-
   useEffect(() => {
     if (tasks.length === 0) {
       return;
@@ -18,33 +15,8 @@ const TasksList = ({ tasks, currentTask, setCurrentTask }) => {
     }
   }, [tasks, currentTask, setCurrentTask]);
 
-  const handleCreateTask = (task) => {
-    setCurrentTask(task);
-    setIsCreateTaskOpen(false);
-  };
-
   return (
-    <div className="flex h-full w-full flex-col p-8">
-      {/* Header */}
-      <div className="mb-10 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <h1 className="text-3xl font-bold text-[#0D062D]">Tasks</h1>
-
-          <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[#EEEAFD] text-sm font-semibold text-[#625F6D]">
-            {tasks.length}
-          </div>
-        </div>
-
-        <button
-          type="button"
-          onClick={() => setIsCreateTaskOpen(true)}
-          className="flex items-center gap-2 rounded-xl bg-[#5030E5] px-5 py-3 text-white transition hover:bg-[#4123D7]"
-        >
-          <span className="text-lg">+</span>
-          Create Task
-        </button>
-      </div>
-
+    <div className="flex h-full w-full flex-col px-8 pb-8">
       {/* Tasks */}
       <div className="flex-1 space-y-4 overflow-y-auto">
         {tasks.map((task) => (
@@ -78,12 +50,6 @@ const TasksList = ({ tasks, currentTask, setCurrentTask }) => {
           </button>
         ))}
       </div>
-
-      <CreateTask
-        open={isCreateTaskOpen}
-        onClose={() => setIsCreateTaskOpen(false)}
-        onCreate={handleCreateTask}
-      />
     </div>
   );
 };

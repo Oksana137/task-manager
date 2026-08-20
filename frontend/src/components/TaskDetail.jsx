@@ -31,7 +31,7 @@ const TaskDetail = ({ task, setTasks }) => {
 
   if (!task) {
     return (
-      <div className="flex flex-1 items-center justify-center p-2">
+      <div className="flex flex-1 items-center justify-center px-2 pb-2">
         <div className="flex h-full w-full flex-col items-center justify-center gap-2 rounded-3xl border border-dashed border-[#E5E5E5] bg-white text-gray-400">
           <p className="text-lg font-medium">No task selected</p>
           <p className="text-sm">Choose a task from the list to view it</p>
@@ -105,8 +105,8 @@ const TaskDetail = ({ task, setTasks }) => {
   };
 
   return (
-    <div className="flex-1 p-2">
-      <div className="flex h-full flex-col overflow-y-auto rounded-3xl border border-[#ECECEC] bg-white p-8 shadow-sm">
+    <div className="flex-1 px-2 pb-2">
+      <div className="flex h-full flex-col overflow-y-auto rounded-3xl border border-[#ECECEC] bg-white p-6 shadow-sm">
         {/* Header */}
         <div className="flex items-start justify-between gap-6">
           <div className="min-w-0 flex-1">
