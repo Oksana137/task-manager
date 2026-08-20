@@ -51,9 +51,6 @@ const TasksGroup = ({ title, status, tasks, onDrop, onDragStart }) => {
         <CreateTask
           open={isCreateTaskOpen}
           onClose={() => setIsCreateTaskOpen(false)}
-          onCreate={(task) => {
-            console.log(task);
-          }}
         />
       </header>
 

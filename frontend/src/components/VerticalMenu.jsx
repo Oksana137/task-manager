@@ -5,10 +5,8 @@ import { useProject } from "../contexts/ProjectContext";
 import { fetchProjects } from "../units/network";
 
 import category from "../icons/category.svg";
-import messages from "../icons/messages.svg";
 import task from "../icons/task.svg";
 import members from "../icons/members.svg";
-import settings from "../icons/settings.svg";
 import addSquare from "../icons/add_square.svg";
 
 const menuItems = [
@@ -18,7 +16,6 @@ const menuItems = [
 ];
 
 const VerticalMenu = () => {
-  const [activeItem, setActiveItem] = useState("Home");
   const [projects, setProjects] = useState([]);
 
   const { selectedProject, setSelectedProject } = useProject();
