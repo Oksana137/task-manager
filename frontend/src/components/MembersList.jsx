@@ -2,9 +2,7 @@ import { useEffect, useState } from "react";
 
 import { fetchProjectMembers } from "../units/network";
 import { useProject } from "../contexts/ProjectContext";
-
-const getAvatarUrl = (member) =>
-  `https://i.pravatar.cc/64?u=${encodeURIComponent(member.email ?? member.id)}`;
+import AvatarIcon from "./AvatarIcon";
 
 const MembersList = () => {
   const { selectedProject } = useProject();
@@ -35,14 +33,11 @@ const MembersList = () => {
     <ul className="flex flex-row items-center justify-end gap-3 py-6">
       {members.map((member) => (
         <li key={member.id} title={member.name || member.email}>
-          <div className="avatar">
-            <div className="w-9 rounded-full ring-2 ring-white">
-              <img
-                src={getAvatarUrl(member)}
-                alt={member.name || member.email}
-              />
-            </div>
-          </div>
+          <AvatarIcon
+            iconId={member.avatarIcon}
+            size={40}
+            className="ring-2 ring-white"
+          />
         </li>
       ))}
     </ul>

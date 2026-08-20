@@ -2,9 +2,7 @@ import { useEffect, useState } from "react";
 
 import { fetchProjectMembers } from "../units/network";
 import { useProject } from "../contexts/ProjectContext";
-
-const getAvatarUrl = (member) =>
-  `https://i.pravatar.cc/128?u=${encodeURIComponent(member.email ?? member.id)}`;
+import AvatarIcon from "../components/AvatarIcon";
 
 const MembersPage = () => {
   const { selectedProject } = useProject();
@@ -59,14 +57,7 @@ const MembersPage = () => {
               key={member.id}
               className="flex flex-col items-center gap-3 rounded-2xl border border-[#ECECEC] bg-white p-6 text-center shadow-sm"
             >
-              <div className="avatar">
-                <div className="w-16 rounded-full">
-                  <img
-                    src={getAvatarUrl(member)}
-                    alt={member.name || member.email}
-                  />
-                </div>
-              </div>
+              <AvatarIcon iconId={member.avatarIcon} size={64} />
 
               <div className="min-w-0">
                 <p className="truncate font-semibold text-[#0D062D]">

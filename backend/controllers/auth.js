@@ -6,7 +6,7 @@ import jwt from "jsonwebtoken";
 // REGISTER
 export const signUp = async (req, res, next) => {
   try {
-    const { email, password, name, city } = req.body;
+    const { email, password, name, city, avatarIcon } = req.body;
 
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser)
@@ -18,6 +18,7 @@ export const signUp = async (req, res, next) => {
       password: hash,
       name,
       city,
+      avatarIcon,
     });
     const token = jwt.sign({ uid: newUser.id }, process.env.JWT_SECRET);
     res.status(201).send({ token });

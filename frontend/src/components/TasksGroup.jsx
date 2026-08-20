@@ -21,7 +21,7 @@ const TasksGroup = ({ title, status, tasks, onDrop, onDragStart }) => {
     <section
       onDragOver={handleDragOver}
       onDrop={() => onDrop(status)}
-      className="min-h-[600px] rounded-2xl bg-[#F5F5F5] p-4"
+      className="min-h-[600px] rounded-2xl bg-[#F2F2F2] p-4"
     >
       {/* Header */}
       <header

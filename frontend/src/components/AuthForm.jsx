@@ -2,6 +2,13 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../contexts/AuthContext";
+import AvatarIcon from "./AvatarIcon";
+import { AVATAR_ICONS, DEFAULT_AVATAR_ICON_ID } from "../units/avatarIcons";
+
+const inputClasses =
+  "h-12 w-full rounded-xl border border-[#E5E5E5] bg-white px-4 text-[15px] text-[#0D062D] placeholder:text-gray-400 outline-none transition focus:border-[#5030E5]";
+
+const labelClasses = "mb-2 block text-sm font-medium text-[#787486]";
 
 const AuthForm = ({
   buttonText,
@@ -18,6 +25,7 @@ const AuthForm = ({
     password: "",
     name: "",
     city: "",
+    avatarIcon: DEFAULT_AVATAR_ICON_ID,
   });
 
   const [errors, setErrors] = useState({
@@ -77,98 +85,144 @@ const AuthForm = ({
       await loadUser();
 
       navigate(redirectPath);
-    } catch (error) {
+    } catch {
       setErrors((prev) => ({ ...prev, ok: false }));
     }
   };
 
   return (
-    <form className="card flex flex-col gap-6 p-8 w-96 bg-base-100 shadow-xl absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-      {showProfileFields && (
-        <>
-          <label className="input input-bordered flex items-center">
-            <input
-              type="text"
-              name="name"
-              className="grow"
-              placeholder="Name"
-              value={formData.name}
-              onChange={handleChange}
-            />
-          </label>
+    <form
+      onSubmit={handleSubmit}
+      className="absolute left-1/2 top-1/2 w-96 max-w-[calc(100vw-2rem)] -translate-x-1/2 -translate-y-1/2 rounded-3xl border border-[#ECECEC] bg-white p-8 shadow-[0_25px_80px_rgba(0,0,0,0.12)]"
+    >
+      <h1 className="mb-1 text-2xl font-bold text-[#0D062D]">
+        {showProfileFields ? "Create your account" : "Welcome back"}
+      </h1>
 
-          <label className="input input-bordered flex items-center">
-            <input
-              type="text"
-              name="city"
-              className="grow"
-              placeholder="City"
-              value={formData.city}
-              onChange={handleChange}
-            />
-          </label>
-        </>
-      )}
+      <p className="mb-6 text-sm text-[#787486]">
+        {showProfileFields
+          ? "Fill in your details to get started"
+          : "Sign in to continue to your workspace"}
+      </p>
 
-      <div className="flex flex-col">
-        <label className="input input-bordered flex items-center">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 16 16"
-            fill="currentColor"
-            className="h-4 w-4 opacity-70"
-          >
-            <path d="M2.5 3A1.5 1.5 0 0 0 1 4.5v.793c.026.009.051.02.076.032L7.674 8.51c.206.1.446.1.652 0l6.598-3.185A.755.755 0 0 1 15 5.293V4.5A1.5 1.5 0 0 0 13.5 3h-11Z" />
-            <path d="M15 6.954 8.978 9.86a2.25 2.25 0 0 1-1.956 0L1 6.954V11.5A1.5 1.5 0 0 0 2.5 13h11a1.5 1.5 0 0 0 1.5-1.5V6.954Z" />
-          </svg>
+      <div className="flex flex-col gap-5">
+        {showProfileFields && (
+          <>
+            <div>
+              <label htmlFor="name" className={labelClasses}>
+                Name
+              </label>
+              <input
+                id="name"
+                type="text"
+                name="name"
+                placeholder="Your name"
+                value={formData.name}
+                onChange={handleChange}
+                className={inputClasses}
+              />
+            </div>
+
+            <div>
+              <label htmlFor="city" className={labelClasses}>
+                City
+              </label>
+              <input
+                id="city"
+                type="text"
+                name="city"
+                placeholder="Your city"
+                value={formData.city}
+                onChange={handleChange}
+                className={inputClasses}
+              />
+            </div>
+
+            <div>
+              <p className={labelClasses}>Choose an icon</p>
+
+              <div className="flex gap-3 overflow-x-auto px-1 py-2">
+                {AVATAR_ICONS.map((icon) => (
+                  <button
+                    key={icon.id}
+                    type="button"
+                    onClick={() =>
+                      setFormData((prev) => ({ ...prev, avatarIcon: icon.id }))
+                    }
+                    className={`shrink-0 rounded-full transition ${
+                      formData.avatarIcon === icon.id
+                        ? "ring-2 ring-[#5030E5] ring-offset-2"
+                        : "opacity-60 hover:opacity-100"
+                    }`}
+                  >
+                    <AvatarIcon iconId={icon.id} size={44} />
+                  </button>
+                ))}
+              </div>
+            </div>
+          </>
+        )}
+
+        <div>
+          <label htmlFor="email" className={labelClasses}>
+            Email
+          </label>
           <input
+            id="email"
             type="email"
             name="email"
-            className="grow"
-            placeholder="Email"
+            placeholder="you@example.com"
             value={formData.email}
             onChange={handleChange}
+            className={inputClasses}
           />
-        </label>
-        <p className="text-red-500">{errors.emailError}</p>
-      </div>
-      <div className="flex flex-col">
-        <label className="input input-bordered flex items-center">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 16 16"
-            fill="currentColor"
-            className="h-4 w-4 opacity-70"
-          >
-            <path
-              fillRule="evenodd"
-              d="M14 6a4 4 0 0 1-4.899 3.899l-1.955 1.955a.5.5 0 0 1-.353.146H5v1.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-2.293a.5.5 0 0 1 .146-.353l3.955-3.955A4 4 0 1 1 14 6Zm-4-2a.75.75 0 0 0 0 1.5.5.5 0 0 1 .5.5.75.75 0 0 0 1.5 0 2 2 0 0 0-2-2Z"
-              clipRule="evenodd"
-            />
-          </svg>
+          {errors.emailError && (
+            <p className="mt-1 text-xs text-red-500">{errors.emailError}</p>
+          )}
+        </div>
+
+        <div>
+          <label htmlFor="password" className={labelClasses}>
+            Password
+          </label>
           <input
+            id="password"
             type="password"
             name="password"
-            className="grow"
-            placeholder="Password"
+            placeholder="••••••••"
             value={formData.password}
             onChange={handleChange}
+            className={inputClasses}
           />
-        </label>
-        <p className="text-red-500">{errors.passError}</p>
-        {!errors.ok && <p className="text-red-500 pt-4"> Failed! </p>}
+          {errors.passError && (
+            <p className="mt-1 text-xs text-red-500">{errors.passError}</p>
+          )}
+          {!errors.ok && (
+            <p className="mt-1 text-xs text-red-500">
+              Something went wrong. Please try again.
+            </p>
+          )}
+        </div>
+
+        <button
+          type="submit"
+          className="mt-1 h-12 rounded-xl bg-[#5030E5] text-[15px] font-medium text-white transition hover:bg-[#4123D7]"
+        >
+          {buttonText}
+        </button>
+
+        {regLink && (
+          <p className="text-center text-sm text-[#787486]">
+            Don&apos;t have an account?{" "}
+            <Link
+              to="/register"
+              className="font-medium text-[#5030E5] hover:underline"
+            >
+              Sign up
+            </Link>
+          </p>
+        )}
       </div>
-      <button className="btn btn-active" onClick={handleSubmit}>
-        {buttonText}
-      </button>
-      {regLink && (
-        <p>
-          <span>Don't have an account? </span>
-          <Link to="/register" className="link link-info">
-            Sign up
-          </Link>
-        </p>
-      )}
     </form>
   );
 };
