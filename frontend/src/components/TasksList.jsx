@@ -16,7 +16,7 @@ const TasksList = ({ tasks, currentTask, setCurrentTask }) => {
   }, [tasks, currentTask, setCurrentTask]);
 
   return (
-    <div className="flex h-full w-full flex-col px-8 pb-8">
+    <div className="flex h-full w-full flex-col p-6">
       {/* Tasks */}
       <div className="flex-1 space-y-4 overflow-y-auto">
         {tasks.map((task) => (
