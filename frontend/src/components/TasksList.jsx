@@ -24,7 +24,7 @@ const TasksList = ({ tasks, currentTask, setCurrentTask }) => {
   };
 
   return (
-    <div className="flex h-full w-full flex-col border-r border-[#E8E8E8] p-8">
+    <div className="flex h-full w-full flex-col p-8">
       {/* Header */}
       <div className="mb-10 flex items-center justify-between">
         <div className="flex items-center gap-3">

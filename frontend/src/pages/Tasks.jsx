@@ -62,7 +62,7 @@ const Tasks = () => {
   }, [filteredTasks]);
 
   return (
-    <div className="grid grid-cols-3 gap-6 p-6">
+    <div className="grid grid-cols-3 gap-6 bg-[#F8F9FD] p-6">
       {GROUPS.map((group) => (
         <TasksGroup
           key={group.status}
