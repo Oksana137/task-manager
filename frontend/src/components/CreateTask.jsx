@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchProjects, createTask } from "../units/network";
+import { createTask } from "../units/network";
 import { useProject } from "../contexts/ProjectContext";
 import { useTasks } from "../contexts/TasksContext";
 
@@ -7,37 +7,18 @@ const statuses = ["To Do", "On Progress", "Done"];
 const priorities = ["Low", "High"];
 
 const CreateTask = ({ open, onClose, onCreate }) => {
-  const { selectedProject } = useProject();
+  const { projects, selectedProject } = useProject();
   const { setTasks } = useTasks();
 
-  const [projects, setProjects] = useState([]);
   const [selectedProjectId, setSelectedProjectId] = useState(0);
-
-  useEffect(() => {
-    const controller = new AbortController();
-
-    fetchProjects({ signal: controller.signal })
-      .then((data) => {
-        setProjects(data);
-
-        if (data.length && !selectedProject) {
-          setSelectedProjectId(data[0].id);
-        }
-      })
-      .catch((error) => {
-        if (error.name !== "AbortError") {
-          console.error("Error fetching projects:", error);
-        }
-      });
-
-    return () => controller.abort();
-  }, []);
 
   useEffect(() => {
     if (selectedProject) {
       setSelectedProjectId(Number(selectedProject.id));
+    } else if (projects.length) {
+      setSelectedProjectId(projects[0].id);
     }
-  }, [selectedProject]);
+  }, [projects, selectedProject]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -74,6 +55,36 @@ const CreateTask = ({ open, onClose, onCreate }) => {
   };
 
   if (!open) return null;
+
+  if (projects.length === 0) {
+    return (
+      <div
+        className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm"
+        onClick={onClose}
+      >
+        <div
+          onClick={(e) => e.stopPropagation()}
+          className="w-full max-w-sm rounded-3xl bg-white p-8 text-center shadow-[0_25px_80px_rgba(0,0,0,0.12)]"
+        >
+          <p className="text-lg font-semibold text-[#0D062D]">
+            Please create a project
+          </p>
+
+          <p className="mt-2 text-sm text-[#787486]">
+            You need at least one project before you can add tasks.
+          </p>
+
+          <button
+            type="button"
+            onClick={onClose}
+            className="mt-6 h-11 w-full rounded-xl bg-[#5030E5] text-[15px] font-medium text-white transition hover:bg-[#4123D7]"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -172,11 +183,8 @@ const CreateTask = ({ open, onClose, onCreate }) => {
               name="projectId"
               value={selectedProjectId}
               onChange={(e) => setSelectedProjectId(Number(e.target.value))}
-              disabled={!projects.length}
               className="h-12 w-full rounded-xl border border-[#E5E5E5] bg-white px-4 text-[15px] text-[#0D062D] outline-none transition focus:border-[#5030E5]"
             >
-              {!projects.length && <option value={0}>No projects</option>}
-
               {projects.map((project) => (
                 <option key={project.id} value={project.id}>
                   {project.title}

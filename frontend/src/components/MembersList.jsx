@@ -30,7 +30,7 @@ const MembersList = () => {
   if (members.length === 0) return null;
 
   return (
-    <ul className="flex flex-row items-center justify-end gap-3 py-6">
+    <ul className="flex flex-row items-center justify-end gap-3">
       {members.map((member) => (
         <li key={member.id} title={member.name || member.email}>
           <AvatarIcon

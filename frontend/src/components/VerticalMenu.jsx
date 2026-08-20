@@ -1,8 +1,6 @@
-import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 
 import { useProject } from "../contexts/ProjectContext";
-import { fetchProjects } from "../units/network";
 
 import category from "../icons/category.svg";
 import task from "../icons/task.svg";
@@ -16,29 +14,7 @@ const menuItems = [
 ];
 
 const VerticalMenu = () => {
-  const [projects, setProjects] = useState([]);
-
-  const { selectedProject, setSelectedProject } = useProject();
-
-  useEffect(() => {
-    const controller = new AbortController();
-
-    fetchProjects({ signal: controller.signal })
-      .then((data) => {
-        setProjects(data);
-
-        if (data.length) {
-          setSelectedProject((prev) => prev ?? data[0]);
-        }
-      })
-      .catch((error) => {
-        if (error.name !== "AbortError") {
-          console.error("Error fetching projects:", error.message);
-        }
-      });
-
-    return () => controller.abort();
-  }, [setSelectedProject]);
+  const { projects, selectedProject, setSelectedProject } = useProject();
 
   return (
     <aside className="h-full border-r border-[#DBDBDB] px-4 py-6">

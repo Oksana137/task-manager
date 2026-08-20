@@ -16,10 +16,10 @@ const Search = () => {
   const results = useMemo(() => {
     const term = query.trim().toLowerCase();
 
-    if (!term) return [];
+    if (!term || !selectedProject) return [];
 
     return tasks.filter((task) => {
-      if (selectedProject && task.projectId !== selectedProject.id) {
+      if (task.projectId !== selectedProject.id) {
         return false;
       }
 

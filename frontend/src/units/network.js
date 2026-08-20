@@ -58,6 +58,29 @@ const fetchProjects = async (options = {}) => {
   }
 };
 
+const fetchMyProjects = async (options = {}) => {
+  try {
+    const response = await fetch(`${API_URL}/projects/mine`, {
+      ...options,
+      headers: {
+        ...getAuthHeaders(),
+        ...(options.headers || {}),
+      },
+    });
+
+    if (!response.ok) {
+      throw new HTTPError(
+        `HTTP error! Status: ${response.status}`,
+        response.status,
+      );
+    }
+
+    return await response.json();
+  } catch (error) {
+    throw error;
+  }
+};
+
 const fetchProjectMembers = async (projectId, options = {}) => {
   try {
     const response = await fetch(`${API_URL}/projects/${projectId}/members`, {
@@ -216,6 +239,7 @@ const fetchCurrentUser = async () => {
 export {
   fetchTasks,
   fetchProjects,
+  fetchMyProjects,
   fetchProjectMembers,
   createTask,
   updateTask,

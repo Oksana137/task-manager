@@ -2,21 +2,17 @@ import { useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import HorizontalMenu from "../components/HorizontalMenu";
 import VerticalMenu from "../components/VerticalMenu";
-import MembersList from "../components/MembersList";
 import CreateTask from "../components/CreateTask";
 import Logo from "../components/Logo";
-import { useProjectTasks } from "../hooks/useProjectTasks";
 
 const MainLayout = () => {
   const location = useLocation();
-  const isTasksBoardPage = location.pathname === "/";
   const isTasksListPage = location.pathname === "/tasks-list";
 
-  const filteredTasks = useProjectTasks();
   const [isCreateTaskOpen, setIsCreateTaskOpen] = useState(false);
 
   return (
-    <div className="grid h-screen grid-cols-[auto_1fr] grid-rows-[auto_auto_1fr]">
+    <div className="grid h-screen grid-cols-[auto_1fr] grid-rows-[auto_1fr]">
       <div className="col-start-1 row-start-1">
         <Logo />
       </div>
@@ -25,23 +21,9 @@ const MainLayout = () => {
         <HorizontalMenu />
       </div>
 
-      <div className="col-start-1 row-start-2 row-span-2 h-full">
+      <div className="col-start-1 row-start-2 h-full">
         <VerticalMenu />
       </div>
-
-      {(isTasksBoardPage || isTasksListPage) && (
-        <div className="col-start-2 row-start-2 flex items-center justify-between bg-[#F8F9FD] px-8">
-          <div className="flex items-center gap-3">
-            <h1 className="text-3xl font-bold text-[#0D062D]">Tasks</h1>
-
-            <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[#EEEAFD] text-sm font-semibold text-[#625F6D]">
-              {filteredTasks.length}
-            </div>
-          </div>
-
-          <MembersList />
-        </div>
-      )}
 
       {isTasksListPage && (
         <>
@@ -71,7 +53,7 @@ const MainLayout = () => {
         </>
       )}
 
-      <div className="col-start-2 row-start-3">
+      <div className="col-start-2 row-start-2">
         <Outlet />
       </div>
     </div>

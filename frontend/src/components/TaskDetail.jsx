@@ -90,7 +90,7 @@ const TaskDetail = ({ task, setTasks }) => {
   };
 
   return (
-    <div className="flex-1 px-2 pb-2 pt-6">
+    <div className="flex-1 px-2 pb-2">
       <div className="flex h-full flex-col overflow-y-auto rounded-3xl border border-[#ECECEC] bg-white p-6 shadow-sm">
         {/* Header */}
         <div className="flex items-start justify-between gap-6">

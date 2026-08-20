@@ -12,6 +12,26 @@ export const getProjects = async (req, res, next) => {
   }
 };
 
+// Get projects the authenticated user is a member of
+export const getMyProjects = async (req, res, next) => {
+  try {
+    const user = await User.findByPk(req.uid, {
+      attributes: { exclude: ["password"] },
+      include: {
+        model: Project,
+        as: "projects",
+        through: { attributes: [] },
+      },
+    });
+
+    if (!user) throw new ErrorResponse("User not found", 404);
+
+    res.status(200).json(user.projects);
+  } catch (err) {
+    next(err);
+  }
+};
+
 // Get members of a project
 export const getProjectMembers = async (req, res, next) => {
   try {
