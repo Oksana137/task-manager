@@ -4,6 +4,7 @@ import { fetchProjectMembers } from "../units/network";
 import { useProject } from "../contexts/ProjectContext";
 import AvatarIcon from "../components/AvatarIcon";
 import NoProjects from "../components/NoProjects";
+import NoMembers from "../components/NoMembers";
 import MembersHeader from "../components/MembersHeader";
 
 const MembersPage = () => {
@@ -33,6 +34,18 @@ const MembersPage = () => {
     return <NoProjects />;
   }
 
+  if (members.length === 0) {
+    return (
+      <NoMembers
+        message={
+          selectedProject
+            ? "This project has no members assigned"
+            : "Select a project to see its members"
+        }
+      />
+    );
+  }
+
   return (
     <div className="flex h-full flex-col overflow-y-auto bg-[#F8F9FD]">
       <MembersHeader
@@ -43,43 +56,28 @@ const MembersPage = () => {
       />
 
       <div className="mt-6 flex-1 px-8 pb-8">
-        {members.length === 0 ? (
-          <div className="flex h-full items-center justify-center">
-            <div className="flex max-w-sm flex-col items-center gap-2 rounded-3xl border border-dashed border-[#E5E5E5] bg-white p-10 text-center text-gray-400">
-              <p className="text-lg font-medium text-[#0D062D]">
-                No members yet
-              </p>
-              <p className="text-sm">
-                {selectedProject
-                  ? "This project has no members assigned"
-                  : "Select a project to see its members"}
-              </p>
-            </div>
-          </div>
-        ) : (
-          <div className="grid grid-cols-2 gap-4 min-[900px]:grid-cols-3 min-[1200px]:grid-cols-4">
-            {members.map((member) => (
-              <div
-                key={member.id}
-                className="flex flex-col items-center gap-3 rounded-2xl border border-[#ECECEC] bg-white p-6 text-center shadow-sm"
-              >
-                <AvatarIcon iconId={member.avatarIcon} size={64} />
+        <div className="grid grid-cols-2 gap-4 min-[900px]:grid-cols-3 min-[1200px]:grid-cols-4">
+          {members.map((member) => (
+            <div
+              key={member.id}
+              className="flex flex-col items-center gap-3 rounded-2xl border border-[#ECECEC] bg-white p-6 text-center shadow-sm"
+            >
+              <AvatarIcon iconId={member.avatarIcon} size={64} />
 
-                <div className="min-w-0">
-                  <p className="truncate font-semibold text-[#0D062D]">
-                    {member.name || member.email}
+              <div className="min-w-0">
+                <p className="truncate font-semibold text-[#0D062D]">
+                  {member.name || member.email}
+                </p>
+
+                {member.city && (
+                  <p className="truncate text-sm text-[#787486]">
+                    {member.city}
                   </p>
-
-                  {member.city && (
-                    <p className="truncate text-sm text-[#787486]">
-                      {member.city}
-                    </p>
-                  )}
-                </div>
+                )}
               </div>
-            ))}
-          </div>
-        )}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

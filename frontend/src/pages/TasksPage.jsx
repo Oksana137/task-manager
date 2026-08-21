@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 import TasksList from "../components/TasksList";
 import TaskDetail from "../components/TaskDetail";
 import NoProjects from "../components/NoProjects";
+import NoTasks from "../components/NoTasks";
 import TasksHeader from "../components/TasksHeader";
 
 import { useTasks } from "../contexts/TasksContext";
@@ -34,6 +35,10 @@ const TasksPage = () => {
 
   if (projectsLoaded && projects.length === 0) {
     return <NoProjects />;
+  }
+
+  if (filteredTasks.length === 0) {
+    return <NoTasks />;
   }
 
   return (

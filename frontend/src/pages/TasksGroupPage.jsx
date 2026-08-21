@@ -2,6 +2,7 @@ import { useCallback, useMemo, useState } from "react";
 
 import TasksGroup from "../components/TasksGroup";
 import NoProjects from "../components/NoProjects";
+import NoTasks from "../components/NoTasks";
 import TasksHeader from "../components/TasksHeader";
 
 import { useTasks } from "../contexts/TasksContext";
@@ -65,11 +66,15 @@ const TasksGroupPage = () => {
     return <NoProjects />;
   }
 
+  if (filteredTasks.length === 0) {
+    return <NoTasks />;
+  }
+
   return (
-    <div className="h-full overflow-y-auto bg-[#F8F9FD]">
+    <div className="flex h-full flex-col overflow-y-auto bg-[#F8F9FD]">
       <TasksHeader count={filteredTasks.length} />
 
-      <div className="mt-6 px-8 pb-8">
+      <div className="mt-6 flex-1 px-8 pb-8">
         <div className="grid grid-cols-3 gap-6">
           {GROUPS.map((group) => (
             <TasksGroup
