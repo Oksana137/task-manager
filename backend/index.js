@@ -1,3 +1,4 @@
+import "dotenv/config";
 import express from "express";
 import userRouter from "./routes/userRouter.js";
 import authRouter from "./routes/authRouter.js";
@@ -7,7 +8,7 @@ import "./models/associations.js";
 import cors from "cors";
 import { errorHandler } from "./middleware/errorHandler.js";
 import User from "./models/User.js";
-import ProjectMember from "./models/ProjectMember.js";
+import { initializeProjectOwnership } from "./db/projectOwnership.js";
 
 const app = express();
 const port = 3000;
@@ -31,7 +32,7 @@ app.use("/auth", authRouter);
 app.use(errorHandler);
 
 User.sync({ alter: true })
-  .then(() => ProjectMember.sync({ alter: true }))
+  .then(initializeProjectOwnership)
   .then(() => {
     app.listen(port, () => {
       console.log(`Server is running on port ${port}`);

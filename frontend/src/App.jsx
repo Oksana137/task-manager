@@ -11,7 +11,6 @@ import MainLayout from "./layouts/MainLayout";
 import ProtectedLayout from "./layouts/ProtectedLayout";
 import TasksGroupPage from "./pages/TasksGroupPage";
 import TasksPage from "./pages/TasksPage";
-import MembersPage from "./pages/MembersPage";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 
@@ -26,7 +25,6 @@ function App() {
           <Route path="/" element={<MainLayout />}>
             <Route index element={<TasksGroupPage />} />
             <Route path="/tasks-list" element={<TasksPage />} />
-            <Route path="/members" element={<MembersPage />} />
           </Route>
         </Route>
       </>,

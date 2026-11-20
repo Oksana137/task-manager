@@ -35,55 +35,9 @@ const fetchTasks = async (options = {}) => {
   }
 };
 
-const fetchProjects = async (options = {}) => {
-  try {
-    const response = await fetch(`${API_URL}/projects`, {
-      ...options,
-      headers: {
-        ...getAuthHeaders(),
-        ...(options.headers || {}),
-      },
-    });
-
-    if (!response.ok) {
-      throw new HTTPError(
-        `HTTP error! Status: ${response.status}`,
-        response.status,
-      );
-    }
-
-    return await response.json();
-  } catch (error) {
-    throw error;
-  }
-};
-
 const fetchMyProjects = async (options = {}) => {
   try {
     const response = await fetch(`${API_URL}/projects/mine`, {
-      ...options,
-      headers: {
-        ...getAuthHeaders(),
-        ...(options.headers || {}),
-      },
-    });
-
-    if (!response.ok) {
-      throw new HTTPError(
-        `HTTP error! Status: ${response.status}`,
-        response.status,
-      );
-    }
-
-    return await response.json();
-  } catch (error) {
-    throw error;
-  }
-};
-
-const fetchProjectMembers = async (projectId, options = {}) => {
-  try {
-    const response = await fetch(`${API_URL}/projects/${projectId}/members`, {
       ...options,
       headers: {
         ...getAuthHeaders(),
@@ -182,14 +136,11 @@ const registrate = async (regData) => {
   }
 };
 
-const authorize = async (authData) => {
+const requestLogin = async (path, options = {}) => {
   try {
-    const response = await fetch(`${API_URL}/auth/login`, {
+    const response = await fetch(`${API_URL}/auth/${path}`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(authData),
+      ...options,
     });
 
     if (!response.ok) {
@@ -209,6 +160,14 @@ const authorize = async (authData) => {
     throw error;
   }
 };
+
+const authorize = (authData) =>
+  requestLogin("login", {
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(authData),
+  });
+
+const authorizeDemo = () => requestLogin("demo");
 
 const fetchCurrentUser = async () => {
   const token = localStorage.getItem("token");
@@ -238,12 +197,11 @@ const fetchCurrentUser = async () => {
 
 export {
   fetchTasks,
-  fetchProjects,
   fetchMyProjects,
-  fetchProjectMembers,
   createTask,
   updateTask,
   registrate,
   authorize,
+  authorizeDemo,
   fetchCurrentUser,
 };

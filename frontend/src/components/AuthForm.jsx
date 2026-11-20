@@ -14,6 +14,7 @@ const AuthForm = ({
   buttonText,
   redirectPath,
   apiCall,
+  demoApiCall,
   regLink,
   showProfileFields = false,
 }) => {
@@ -33,6 +34,8 @@ const AuthForm = ({
     emailError: "",
     passError: "",
   });
+  const [pendingAction, setPendingAction] = useState(null);
+  const [demoError, setDemoError] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -68,6 +71,8 @@ const AuthForm = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (pendingAction) return;
+    setDemoError(false);
     setErrors({
       ok: true,
       emailError: "",
@@ -79,6 +84,7 @@ const AuthForm = ({
       return;
     }
 
+    setPendingAction("submit");
     try {
       await apiCall(formData);
 
@@ -87,6 +93,30 @@ const AuthForm = ({
       navigate(redirectPath);
     } catch {
       setErrors((prev) => ({ ...prev, ok: false }));
+    } finally {
+      setPendingAction(null);
+    }
+  };
+
+  const handleDemo = async () => {
+    if (pendingAction) return;
+    setPendingAction("demo");
+    setDemoError(false);
+    setErrors({ ok: true, emailError: "", passError: "" });
+
+    try {
+      await demoApiCall();
+      if (!(await loadUser())) {
+        localStorage.removeItem("token");
+        setDemoError(true);
+        return;
+      }
+
+      navigate(redirectPath);
+    } catch {
+      setDemoError(true);
+    } finally {
+      setPendingAction(null);
     }
   };
 
@@ -206,10 +236,34 @@ const AuthForm = ({
 
         <button
           type="submit"
-          className="mt-1 h-12 rounded-xl bg-[#5030E5] text-[15px] font-medium text-white transition hover:bg-[#4123D7]"
+          disabled={Boolean(pendingAction)}
+          className="mt-1 h-12 rounded-xl bg-[#5030E5] text-[15px] font-medium text-white transition hover:bg-[#4123D7] disabled:opacity-60"
         >
           {buttonText}
         </button>
+
+        {demoApiCall && (
+          <div>
+            <button
+              type="button"
+              onClick={handleDemo}
+              disabled={Boolean(pendingAction)}
+              className="flex h-12 w-full items-center justify-center gap-2 rounded-xl border border-[#DED5FC] bg-[#F7F4FF] text-[15px] font-semibold text-[#5030E5] transition hover:border-[#B9A8F6] hover:bg-[#EEE8FF] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#5030E5] disabled:opacity-60"
+            >
+              <span className="grid size-6 place-items-center rounded-full bg-white" aria-hidden="true">
+                <svg viewBox="0 0 16 16" className="size-3.5" fill="currentColor">
+                  <path d="M5 2.8a.7.7 0 0 1 1.07-.59l7 5.2a.7.7 0 0 1 0 1.18l-7 5.2A.7.7 0 0 1 5 13.2Z" />
+                </svg>
+              </span>
+              {pendingAction === "demo" ? "Opening demo…" : "Try Demo"}
+            </button>
+            {demoError && (
+              <p role="alert" className="mt-2 text-center text-xs text-red-500">
+                The demo is unavailable. Please try again later.
+              </p>
+            )}
+          </div>
+        )}
 
         {regLink && (
           <p className="text-center text-sm text-[#787486]">

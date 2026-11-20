@@ -4,13 +4,11 @@ import { useProject } from "../contexts/ProjectContext";
 
 import category from "../icons/category.svg";
 import task from "../icons/task.svg";
-import members from "../icons/members.svg";
 import addSquare from "../icons/add_square.svg";
 
 const menuItems = [
   { icon: category, label: "Home", path: "/" },
   { icon: task, label: "Task", path: "/tasks-list" },
-  { icon: members, label: "Members", path: "/members" },
 ];
 
 const VerticalMenu = () => {

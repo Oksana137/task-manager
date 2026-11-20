@@ -9,6 +9,7 @@ export const getTasks = async (req, res, next) => {
       include: {
         model: Project,
         as: "project",
+        where: { ownerId: req.uid },
       },
     });
 
@@ -27,7 +28,9 @@ export const createTask = async (req, res, next) => {
       return next(new ErrorResponse("Title and projectId are required", 400));
     }
 
-    const project = await Project.findByPk(projectId);
+    const project = await Project.findOne({
+      where: { id: projectId, ownerId: req.uid },
+    });
 
     if (!project) {
       return next(new ErrorResponse("Project not found", 404));
@@ -60,15 +63,22 @@ export const updateTask = async (req, res, next) => {
     const { id } = req.params;
     const { title, description, status, priority, projectId } = req.body;
 
-    const task = await Task.findByPk(id);
+    const task = await Task.findByPk(id, {
+      include: {
+        model: Project,
+        as: "project",
+        where: { ownerId: req.uid },
+      },
+    });
 
     if (!task) {
       return next(new ErrorResponse("Task not found", 404));
     }
 
-    // Если меняется проект — проверяем, что он существует
-    if (projectId) {
-      const project = await Project.findByPk(projectId);
+    if (projectId !== undefined && projectId !== task.projectId) {
+      const project = await Project.findOne({
+        where: { id: projectId, ownerId: req.uid },
+      });
 
       if (!project) {
         return next(new ErrorResponse("Project not found", 404));

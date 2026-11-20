@@ -13,10 +13,12 @@ export const AuthContextProvider = ({ children }) => {
 
       setUser(currentUser);
       setIsAuth(Boolean(currentUser));
+      return currentUser;
     } catch (error) {
       console.error("Authentication failed.", error);
       setUser(null);
       setIsAuth(false);
+      return null;
     }
   }, []);
 

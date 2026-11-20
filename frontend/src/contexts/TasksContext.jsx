@@ -5,17 +5,20 @@ import {
   useState,
   useCallback,
 } from "react";
+import { AuthContext } from "./AuthContext";
 import { fetchTasks } from "../units/network";
 
 const TasksContext = createContext(null);
 
 export const TasksProvider = ({ children }) => {
+  const { user } = useContext(AuthContext);
+  const userId = user?.id;
   const [tasks, setTasks] = useState([]);
 
   const loadTasks = useCallback(async (signal) => {
     try {
       const data = await fetchTasks({ signal });
-      setTasks(data);
+      if (!signal?.aborted) setTasks(data);
     } catch (error) {
       if (error.name !== "AbortError") {
         console.error("Error fetching tasks:", error);
@@ -24,12 +27,15 @@ export const TasksProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
+    setTasks([]);
+    if (!userId) return;
+
     const controller = new AbortController();
 
     loadTasks(controller.signal);
 
     return () => controller.abort();
-  }, [loadTasks]);
+  }, [loadTasks, userId]);
 
   return (
     <TasksContext.Provider

@@ -27,21 +27,38 @@ export const signUp = async (req, res, next) => {
   }
 };
 
+const createLoginToken = (user) =>
+  jwt.sign({ uid: user.id }, process.env.JWT_SECRET, { expiresIn: "30m" });
+
 // LOGIN
 export const signIn = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-
     const existingUser = await User.findOne({ where: { email } });
     if (!existingUser) throw new ErrorResponse("Email does not exist", 404);
 
     const match = await bcrypt.compare(password, existingUser.password);
     if (!match) throw new ErrorResponse("Password is incorrect", 401);
 
-    const token = jwt.sign({ uid: existingUser.id }, process.env.JWT_SECRET, {
-      expiresIn: "30m",
-    });
-    res.json({ token });
+    res.json({ token: createLoginToken(existingUser) });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const signInDemo = async (_req, res, next) => {
+  try {
+    const email = process.env.DEMO_EMAIL?.trim();
+    if (!email) {
+      throw new ErrorResponse("Demo account is not configured", 503);
+    }
+
+    const user = await User.findOne({ where: { email } });
+    if (!user) {
+      throw new ErrorResponse("Demo account was not found", 503);
+    }
+
+    res.json({ token: createLoginToken(user) });
   } catch (err) {
     next(err);
   }

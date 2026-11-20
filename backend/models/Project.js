@@ -12,6 +12,10 @@ const Project = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    ownerId: {
+      type: DataTypes.INTEGER,
+      references: { model: "User", key: "id" },
+    },
   },
   {
     timestamps: false,

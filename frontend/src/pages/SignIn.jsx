@@ -1,4 +1,4 @@
-import { authorize } from "../units/network";
+import { authorize, authorizeDemo } from "../units/network";
 import AuthForm from "../components/AuthForm";
 
 const SignIn = () => {
@@ -7,6 +7,7 @@ const SignIn = () => {
       buttonText="Sign In"
       redirectPath="/"
       apiCall={authorize}
+      demoApiCall={authorizeDemo}
       regLink={true}
     />
   );
