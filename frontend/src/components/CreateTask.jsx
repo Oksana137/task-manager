@@ -41,7 +41,9 @@ const CreateTask = ({ open, onClose, onCreate }) => {
     try {
       const createdTask = await createTask(task);
 
-      setTasks((prev) => [...prev, createdTask]);
+      setTasks((prev) =>
+        prev.some(({ id }) => id === createdTask.id) ? prev : [...prev, createdTask],
+      );
 
       onCreate?.(createdTask);
 

@@ -4,12 +4,17 @@ import HorizontalMenu from "../components/HorizontalMenu";
 import VerticalMenu from "../components/VerticalMenu";
 import CreateTask from "../components/CreateTask";
 import Logo from "../components/Logo";
+import { useProject } from "../contexts/ProjectContext";
+import { useProjectTasks } from "../hooks/useProjectTasks";
 
 const MainLayout = () => {
   const location = useLocation();
   const isTasksListPage = location.pathname === "/tasks-list";
+  const { selectedProject } = useProject();
+  const projectTasks = useProjectTasks();
 
   const [isCreateTaskOpen, setIsCreateTaskOpen] = useState(false);
+  const openCreateTask = () => setIsCreateTaskOpen(true);
 
   return (
     <div className="grid h-screen grid-cols-[auto_1fr] grid-rows-[auto_1fr]">
@@ -25,36 +30,33 @@ const MainLayout = () => {
         <VerticalMenu />
       </div>
 
-      {isTasksListPage && (
-        <>
-          <button
-            type="button"
-            onClick={() => setIsCreateTaskOpen(true)}
-            aria-label="Create task"
-            className="fixed bottom-8 right-8 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-[#5030E5] text-white shadow-lg transition hover:bg-[#4123D7]"
+      {isTasksListPage && (!selectedProject || projectTasks.length > 0) && (
+        <button
+          type="button"
+          onClick={openCreateTask}
+          aria-label="Create task"
+          className="fixed bottom-8 right-8 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-[#5030E5] text-white shadow-lg transition hover:bg-[#4123D7]"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2.5}
+            strokeLinecap="round"
+            className="h-6 w-6"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth={2.5}
-              strokeLinecap="round"
-              className="h-6 w-6"
-            >
-              <path d="M12 5v14M5 12h14" />
-            </svg>
-          </button>
+            <path d="M12 5v14M5 12h14" />
+          </svg>
+        </button>
+      )}
 
-          <CreateTask
-            open={isCreateTaskOpen}
-            onClose={() => setIsCreateTaskOpen(false)}
-          />
-        </>
+      {isCreateTaskOpen && (
+        <CreateTask open onClose={() => setIsCreateTaskOpen(false)} />
       )}
 
       <div className="col-start-2 row-start-2">
-        <Outlet />
+        <Outlet context={{ openCreateTask }} />
       </div>
     </div>
   );

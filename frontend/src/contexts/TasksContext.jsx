@@ -18,7 +18,13 @@ export const TasksProvider = ({ children }) => {
   const loadTasks = useCallback(async (signal) => {
     try {
       const data = await fetchTasks({ signal });
-      if (!signal?.aborted) setTasks(data);
+      if (signal?.aborted) return;
+
+      const fetchedIds = new Set(data.map((task) => task.id));
+      setTasks((current) => [
+        ...data,
+        ...current.filter((task) => !fetchedIds.has(task.id)),
+      ]);
     } catch (error) {
       if (error.name !== "AbortError") {
         console.error("Error fetching tasks:", error);

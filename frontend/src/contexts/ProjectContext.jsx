@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
 import { AuthContext } from "./AuthContext";
-import { fetchMyProjects } from "../units/network";
+import { createProject, fetchMyProjects } from "../units/network";
 
 const ProjectContext = createContext();
 
@@ -24,25 +24,35 @@ export const ProjectProvider = ({ children }) => {
 
     fetchMyProjects({ signal: controller.signal })
       .then((data) => {
-        setProjects(data);
-
-        setSelectedProject((prev) => {
-          if (prev && data.some((project) => project.id === prev.id)) {
-            return prev;
-          }
-
-          return data[0] ?? null;
-        });
+        if (controller.signal.aborted) return;
+        const fetchedIds = new Set(data.map((project) => project.id));
+        setProjects((current) => [
+          ...data,
+          ...current.filter((project) => !fetchedIds.has(project.id)),
+        ]);
+        setSelectedProject((current) => current ?? data[0] ?? null);
       })
       .catch((error) => {
         if (error.name !== "AbortError") {
           console.error("Error fetching projects:", error.message);
         }
       })
-      .finally(() => setProjectsLoaded(true));
+      .finally(() => {
+        if (!controller.signal.aborted) setProjectsLoaded(true);
+      });
 
     return () => controller.abort();
   }, [isAuth]);
+
+  const addProject = async (title, signal) => {
+    const project = await createProject(title, signal);
+    if (signal.aborted) return;
+
+    setProjects((current) =>
+      current.some(({ id }) => id === project.id) ? current : [...current, project],
+    );
+    setSelectedProject(project);
+  };
 
   return (
     <ProjectContext.Provider
@@ -51,6 +61,7 @@ export const ProjectProvider = ({ children }) => {
         projectsLoaded,
         selectedProject,
         setSelectedProject,
+        addProject,
       }}
     >
       {children}
