@@ -10,6 +10,16 @@ const inputClasses =
 
 const labelClasses = "mb-2 block text-sm font-medium text-[#787486]";
 
+const getSubmitError = (error, isRegistration) => {
+  if (isRegistration && error.status === 409) {
+    return "An account with this email already exists. Sign in instead.";
+  }
+  if (!isRegistration && (error.status === 401 || error.status === 404)) {
+    return "Email or password is incorrect.";
+  }
+  return "Something went wrong. Please try again.";
+};
+
 const AuthForm = ({
   buttonText,
   redirectPath,
@@ -30,7 +40,7 @@ const AuthForm = ({
   });
 
   const [errors, setErrors] = useState({
-    ok: true,
+    submitError: "",
     emailError: "",
     passError: "",
   });
@@ -50,7 +60,7 @@ const AuthForm = ({
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const passRegex = /^.{8,}$/;
 
-    if (!emailRegex.test(formData.email)) {
+    if (!emailRegex.test(formData.email.trim())) {
       setErrors((prev) => ({
         ...prev,
         emailError: "Invalid Email",
@@ -74,7 +84,7 @@ const AuthForm = ({
     if (pendingAction) return;
     setDemoError(false);
     setErrors({
-      ok: true,
+      submitError: "",
       emailError: "",
       passError: "",
     });
@@ -86,13 +96,23 @@ const AuthForm = ({
 
     setPendingAction("submit");
     try {
-      await apiCall(formData);
+      await apiCall({ ...formData, email: formData.email.trim() });
 
-      await loadUser();
+      if (!showProfileFields && !(await loadUser())) {
+        localStorage.removeItem("token");
+        setErrors((prev) => ({
+          ...prev,
+          submitError: "Could not load your account. Please sign in again.",
+        }));
+        return;
+      }
 
       navigate(redirectPath);
-    } catch {
-      setErrors((prev) => ({ ...prev, ok: false }));
+    } catch (error) {
+      setErrors((prev) => ({
+        ...prev,
+        submitError: getSubmitError(error, showProfileFields),
+      }));
     } finally {
       setPendingAction(null);
     }
@@ -102,7 +122,7 @@ const AuthForm = ({
     if (pendingAction) return;
     setPendingAction("demo");
     setDemoError(false);
-    setErrors({ ok: true, emailError: "", passError: "" });
+    setErrors({ submitError: "", emailError: "", passError: "" });
 
     try {
       await demoApiCall();
@@ -112,7 +132,7 @@ const AuthForm = ({
         return;
       }
 
-      navigate(redirectPath);
+      navigate(redirectPath, { replace: true });
     } catch {
       setDemoError(true);
     } finally {
@@ -227,9 +247,9 @@ const AuthForm = ({
           {errors.passError && (
             <p className="mt-1 text-xs text-red-500">{errors.passError}</p>
           )}
-          {!errors.ok && (
-            <p className="mt-1 text-xs text-red-500">
-              Something went wrong. Please try again.
+          {errors.submitError && (
+            <p role="alert" className="mt-1 text-xs text-red-500">
+              {errors.submitError}
             </p>
           )}
         </div>
