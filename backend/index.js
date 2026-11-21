@@ -9,6 +9,7 @@ import cors from "cors";
 import { errorHandler } from "./middleware/errorHandler.js";
 import verifyToken from "./middleware/verifyToken.js";
 import User from "./models/User.js";
+import Task from "./models/Task.js";
 import { initializeProjectOwnership } from "./db/projectOwnership.js";
 
 const app = express();
@@ -34,6 +35,7 @@ app.use(errorHandler);
 
 User.sync({ alter: true })
   .then(initializeProjectOwnership)
+  .then(() => Task.sync())
   .then(() => {
     app.listen(port, () => {
       console.log(`Server is running on port ${port}`);
