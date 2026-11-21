@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 
 import TasksGroup from "../components/TasksGroup";
 import NoProjects from "../components/NoProjects";
@@ -21,31 +21,38 @@ const TasksGroupPage = () => {
   const { projects, projectsLoaded } = useProject();
   const filteredTasks = useProjectTasks();
 
-  const [draggedTaskId, setDraggedTaskId] = useState(null);
+  const draggedTaskId = useRef(null);
+  const pendingMoves = useRef(new Set());
+  const [moveError, setMoveError] = useState("");
 
   const handleDragStart = useCallback((taskId) => {
-    setDraggedTaskId(taskId);
+    draggedTaskId.current = taskId;
   }, []);
 
   const handleDrop = useCallback(
     async (status) => {
-      if (!draggedTaskId) return;
+      const taskId = draggedTaskId.current;
+      draggedTaskId.current = null;
+      const task = filteredTasks.find(({ id }) => id === taskId);
+      if (!task || task.status === status || pendingMoves.current.has(taskId)) return;
 
-      setTasks((prev) =>
-        prev.map((task) =>
-          task.id === draggedTaskId ? { ...task, status } : task,
-        ),
-      );
-
+      pendingMoves.current.add(taskId);
+      setMoveError("");
       try {
-        await updateTask(draggedTaskId, { status });
+        const updatedTask = await updateTask(taskId, { status });
+        setTasks((prev) =>
+          prev.map((item) =>
+            item.id === taskId ? { ...item, status: updatedTask.status } : item,
+          ),
+        );
       } catch (error) {
         console.error("Failed to update task:", error);
+        setMoveError("Could not move the task. Please try again.");
+      } finally {
+        pendingMoves.current.delete(taskId);
       }
-
-      setDraggedTaskId(null);
     },
-    [draggedTaskId, setTasks],
+    [filteredTasks, setTasks],
   );
 
   const tasksByStatus = useMemo(() => {
@@ -75,6 +82,11 @@ const TasksGroupPage = () => {
       <TasksHeader count={filteredTasks.length} />
 
       <div className="mt-6 flex-1 px-8 pb-8">
+        {moveError && (
+          <p role="alert" className="mb-4 text-sm text-red-600">
+            {moveError}
+          </p>
+        )}
         <div className="grid grid-cols-3 gap-6">
           {GROUPS.map((group) => (
             <TasksGroup
