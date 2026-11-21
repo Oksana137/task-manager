@@ -7,6 +7,7 @@ import projectRouter from "./routes/projectRouter.js";
 import "./models/associations.js";
 import cors from "cors";
 import { errorHandler } from "./middleware/errorHandler.js";
+import verifyToken from "./middleware/verifyToken.js";
 import User from "./models/User.js";
 import { initializeProjectOwnership } from "./db/projectOwnership.js";
 
@@ -26,7 +27,7 @@ app.use(
 app.use("/tasks", taskRouter);
 app.use("/projects", projectRouter);
 
-app.use("/users", userRouter);
+app.use("/users", verifyToken, userRouter);
 app.use("/auth", authRouter);
 
 app.use(errorHandler);
