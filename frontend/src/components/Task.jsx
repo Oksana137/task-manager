@@ -1,6 +1,5 @@
 import { memo } from "react";
 
-import messages from "../icons/messages.svg";
 import { getTaskBadge } from "../units/taskDisplay";
 
 const Task = ({ task, onDragStart }) => {
@@ -40,12 +39,6 @@ const Task = ({ task, onDragStart }) => {
 
       {/* Description */}
       <p className="text-sm text-[#787486]">{task.description}</p>
-
-      {/* Meta */}
-      <div className="mt-8 flex items-center justify-end gap-2 text-sm text-[#787486]">
-        <img src={messages} alt="comments" className="h-4 w-4 opacity-70" />
-        {task.commentsNumber ?? 0} comments
-      </div>
     </article>
   );
 };

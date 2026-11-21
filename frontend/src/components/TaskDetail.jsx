@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 
-import messages from "../icons/messages.svg";
 import { statusColors, statusDots, statusNames } from "../units/taskDisplay";
 import { updateTask } from "../units/network";
 
@@ -220,12 +219,6 @@ const TaskDetail = ({ task, setTasks }) => {
               </div>
             )}
           </div>
-        </div>
-
-        {/* Meta */}
-        <div className="mt-6 flex items-center gap-2 text-sm text-[#787486]">
-          <img src={messages} alt="comments" className="h-4 w-4 opacity-70" />
-          {task.commentsNumber ?? 0} comments
         </div>
       </div>
     </div>
