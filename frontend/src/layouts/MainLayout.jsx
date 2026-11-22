@@ -1,18 +1,11 @@
 import { useState } from "react";
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import WorkspaceHeader from "../components/WorkspaceHeader";
 import WorkspaceSidebar from "../components/WorkspaceSidebar";
 import CreateTaskDialog from "../components/CreateTaskDialog";
 import Logo from "../components/Logo";
-import { useProject } from "../contexts/ProjectContext";
-import { useProjectTasks } from "../hooks/useProjectTasks";
 
 const MainLayout = () => {
-  const location = useLocation();
-  const isTasksListPage = location.pathname === "/tasks-list";
-  const { selectedProject } = useProject();
-  const projectTasks = useProjectTasks();
-
   const [isCreateTaskOpen, setIsCreateTaskOpen] = useState(false);
   const openCreateTask = () => setIsCreateTaskOpen(true);
 
@@ -30,32 +23,11 @@ const MainLayout = () => {
         <WorkspaceSidebar />
       </div>
 
-      {isTasksListPage && (!selectedProject || projectTasks.length > 0) && (
-        <button
-          type="button"
-          onClick={openCreateTask}
-          aria-label="Create task"
-          className="fixed bottom-8 right-8 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-[#5030E5] text-white shadow-lg transition hover:bg-[#4123D7]"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={2.5}
-            strokeLinecap="round"
-            className="h-6 w-6"
-          >
-            <path d="M12 5v14M5 12h14" />
-          </svg>
-        </button>
-      )}
-
       {isCreateTaskOpen && (
         <CreateTaskDialog open onClose={() => setIsCreateTaskOpen(false)} />
       )}
 
-      <div className="col-start-2 row-start-2">
+      <div className="relative col-start-2 row-start-2">
         <Outlet context={{ openCreateTask }} />
       </div>
     </div>

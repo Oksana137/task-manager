@@ -39,3 +39,9 @@ export const getTaskBadge = ({ status, priority }) => {
     bgColor: "rgba(213,141,73,0.2)",
   };
 };
+
+export const filterTasks = (tasks, { statuses, priorities }) =>
+  tasks.filter((task) =>
+    (!statuses.length || statuses.includes(task.status)) &&
+    (!priorities.length || priorities.includes(task.priority)),
+  );

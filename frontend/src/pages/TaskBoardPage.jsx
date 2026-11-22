@@ -10,6 +10,7 @@ import { useTasks } from "../contexts/TasksContext";
 import { useProject } from "../contexts/ProjectContext";
 import { useProjectTasks } from "../hooks/useProjectTasks";
 import { updateTask } from "../units/network";
+import { filterTasks } from "../units/taskDisplay";
 
 const GROUPS = [
   { title: "To Do", status: "to do" },
@@ -58,13 +59,7 @@ const TaskBoardPage = () => {
     [projectTasks, setTasks],
   );
 
-  const visibleTasks = useMemo(() => {
-    const { statuses, priorities } = filters;
-    return projectTasks.filter((task) =>
-      (!statuses.length || statuses.includes(task.status)) &&
-      (!priorities.length || priorities.includes(task.priority)),
-    );
-  }, [filters, projectTasks]);
+  const visibleTasks = useMemo(() => filterTasks(projectTasks, filters), [filters, projectTasks]);
 
   const tasksByStatus = useMemo(() => {
     return visibleTasks.reduce(

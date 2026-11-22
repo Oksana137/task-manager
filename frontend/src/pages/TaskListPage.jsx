@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useOutletContext } from "react-router-dom";
 
 import TaskList from "../components/TaskList";
 import TaskDetailsPanel from "../components/TaskDetailsPanel";
@@ -10,55 +10,55 @@ import ProjectHeader from "../components/ProjectHeader";
 import { useTasks } from "../contexts/TasksContext";
 import { useProject } from "../contexts/ProjectContext";
 import { useProjectTasks } from "../hooks/useProjectTasks";
+import { filterTasks } from "../units/taskDisplay";
 
 const TaskListPage = () => {
-  const { tasks, setTasks } = useTasks();
+  const { setTasks } = useTasks();
   const { projects, projectsLoaded } = useProject();
-  const filteredTasks = useProjectTasks();
+  const projectTasks = useProjectTasks();
+  const { openCreateTask } = useOutletContext();
   const location = useLocation();
 
-  const [selectedTask, setSelectedTask] = useState(null);
+  const [filters, setFilters] = useState({ statuses: [], priorities: [] });
+  const [selectedTaskId, setSelectedTaskId] = useState(location.state?.taskId);
 
   useEffect(() => {
-    const taskId = location.state?.taskId;
+    setSelectedTaskId(location.state?.taskId);
+  }, [location.key, location.state?.taskId]);
 
-    if (!taskId) return;
-
-    const task = tasks.find((t) => t.id === taskId);
-
-    if (task) setSelectedTask(task);
-  }, [location.state, tasks]);
-
+  const filteredTasks = filterTasks(projectTasks, filters);
   const currentTask =
-    filteredTasks.find((task) => task.id === selectedTask?.id) ||
+    filteredTasks.find((task) => task.id === selectedTaskId) ||
     filteredTasks[0];
 
   if (projectsLoaded && projects.length === 0) {
     return <NoProjects />;
   }
 
-  if (filteredTasks.length === 0) {
+  if (projectTasks.length === 0) {
     return <NoTasks />;
   }
 
   return (
-    <div className="flex h-full flex-col">
-      <ProjectHeader />
+    <div className="flex h-full min-w-0 flex-col bg-white lg:absolute lg:inset-0">
+      <ProjectHeader onNewTask={openCreateTask} filters={filters} onApplyFilters={setFilters} />
 
-      <div className="mt-6 flex flex-1 overflow-hidden">
-        <div className="w-1/2">
+      {currentTask ? (
+        <div className="grid flex-1 grid-cols-1 content-start gap-5 px-8 pb-8 lg:min-h-0 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] lg:grid-rows-[minmax(0,1fr)] lg:content-stretch">
           <TaskList
             tasks={filteredTasks}
             currentTask={currentTask}
-            setCurrentTask={setSelectedTask}
-            setTasks={setTasks}
+            setCurrentTask={(task) => setSelectedTaskId(task.id)}
           />
+          <TaskDetailsPanel key={currentTask.id} task={currentTask} setTasks={setTasks} />
         </div>
-
-        <div className="w-1/2">
-          <TaskDetailsPanel task={currentTask} setTasks={setTasks} />
+      ) : (
+        <div className="flex flex-1 items-center justify-center px-8 pb-8">
+          <p role="status" className="rounded-3xl border border-dashed border-[#E5E5E5] p-10 text-center text-lg font-medium text-[#0D062D]">
+            No tasks match these filters.
+          </p>
         </div>
-      </div>
+      )}
     </div>
   );
 };
