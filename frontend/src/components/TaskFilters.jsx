@@ -116,7 +116,7 @@ const TaskFilters = ({ filters, onApply }) => {
             </button>
             <button
               type="submit"
-              className="rounded-lg bg-[#5030E5] px-3 py-2 font-semibold text-white hover:bg-[#4123D7]"
+              className="rounded-lg bg-[#503681] px-3 py-2 font-semibold text-white hover:bg-[#432C6D]"
             >
               Apply Filters
             </button>
