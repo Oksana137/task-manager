@@ -24,11 +24,17 @@ const WorkspaceSidebar = () => {
   const [error, setError] = useState("");
   const [isSaving, setIsSaving] = useState(false);
   const addButton = useRef(null);
+  const projectDialog = useRef(null);
   const saveRequest = useRef(null);
 
   useEffect(() => () => saveRequest.current?.abort(), []);
 
+  useEffect(() => {
+    if (isFormOpen) projectDialog.current?.showModal();
+  }, [isFormOpen]);
+
   const closeForm = () => {
+    projectDialog.current?.close();
     setIsFormOpen(false);
     setProjectName("");
     setError("");
@@ -87,8 +93,9 @@ const WorkspaceSidebar = () => {
           ref={addButton}
           type="button"
           aria-label="Add project"
+          aria-haspopup="dialog"
           aria-expanded={isFormOpen}
-          aria-controls={isFormOpen ? "new-project-form" : undefined}
+          aria-controls={isFormOpen ? "new-project-dialog" : undefined}
           onClick={() => {
             if (isSaving) return;
             if (isFormOpen) closeForm();
@@ -101,53 +108,78 @@ const WorkspaceSidebar = () => {
       </div>
 
       {isFormOpen && (
-        <form
-          id="new-project-form"
-          onSubmit={handleSave}
-          onKeyDown={(event) => {
-            if (event.key === "Escape" && !isSaving) closeForm();
+        <dialog
+          ref={projectDialog}
+          id="new-project-dialog"
+          aria-labelledby="new-project-heading"
+          onCancel={(event) => {
+            event.preventDefault();
+            if (!isSaving) closeForm();
           }}
-          className="mb-3 ml-auto flex w-48 max-w-full flex-col gap-2"
+          onClick={(event) => {
+            if (event.target === event.currentTarget && !isSaving) closeForm();
+          }}
+          className="m-auto max-h-[calc(100%-2rem)] w-[calc(100%-2rem)] max-w-md overflow-y-auto rounded-3xl bg-white p-0 text-[#0D062D] shadow-[0_24px_64px_rgba(26,15,44,0.28)] backdrop:bg-[#211632]/45 backdrop:backdrop-blur-sm"
         >
-          <label htmlFor="new-project-name" className="sr-only">
-            Project name
-          </label>
-          <input
-            id="new-project-name"
-            type="text"
-            value={projectName}
-            onChange={(event) => setProjectName(event.target.value)}
-            placeholder="Project name"
-            maxLength={255}
-            required
-            autoFocus
-            readOnly={isSaving}
-            aria-describedby={error ? "new-project-error" : undefined}
-            className="w-full rounded-2xl border border-[#DED5FA] bg-[#F7F4FF] px-3 py-2 text-sm text-[#0D062D] caret-[#5030E5] outline-none [filter:drop-shadow(0_0_0.65px_#AB9ACF)_drop-shadow(0_5px_9px_rgba(80,48,229,0.12))] placeholder:text-[#787486] focus:border-[#AB9ACF] focus:bg-[#F3EEFF]"
-          />
-          {error && (
-            <p id="new-project-error" role="alert" className="text-xs text-red-600">
-              {error}
-            </p>
-          )}
-          <div className="flex justify-end gap-2">
-            <button
-              type="button"
-              onClick={closeForm}
-              disabled={isSaving}
-              className="rounded-full px-2.5 py-1.5 text-xs font-medium text-[#E3DCEF] hover:bg-white/10 disabled:opacity-60"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={isSaving || !projectName.trim()}
-              className="rounded-full bg-[#5030E5] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#4123D7] disabled:opacity-60"
-            >
-              {isSaving ? "Saving…" : "Save"}
-            </button>
-          </div>
-        </form>
+          <form id="new-project-form" onSubmit={handleSave} className="px-5 sm:px-6">
+            <div className="flex items-center justify-between gap-4 border-b border-[#DDD5EB] py-4">
+              <h2 id="new-project-heading" className="text-2xl font-bold tracking-tight">
+                New Project
+              </h2>
+              <button
+                type="button"
+                aria-label="Close"
+                onClick={closeForm}
+                disabled={isSaving}
+                className="grid size-9 shrink-0 place-items-center rounded-lg text-2xl leading-none text-[#503681] transition hover:bg-[#F1EBF8] disabled:opacity-60"
+              >
+                &times;
+              </button>
+            </div>
+
+            <div className="py-5">
+              <label htmlFor="new-project-name" className="mb-1.5 block text-sm font-semibold">
+                Project name
+              </label>
+              <input
+                id="new-project-name"
+                type="text"
+                value={projectName}
+                onChange={(event) => setProjectName(event.target.value)}
+                placeholder="e.g. Website redesign"
+                maxLength={255}
+                required
+                autoFocus
+                readOnly={isSaving}
+                aria-describedby={error ? "new-project-error" : undefined}
+                className="h-11 w-full rounded-xl border border-[#A89BC4] bg-white px-3.5 text-sm outline-none transition placeholder:text-[#716588] focus:border-[#503681] focus:ring-2 focus:ring-[#E7DFF4]"
+              />
+              {error && (
+                <p id="new-project-error" role="alert" className="mt-2 text-sm text-red-600">
+                  {error}
+                </p>
+              )}
+            </div>
+
+            <div className="flex flex-wrap justify-end gap-3 border-t border-[#DDD5EB] py-4">
+              <button
+                type="button"
+                onClick={closeForm}
+                disabled={isSaving}
+                className="h-11 rounded-xl border border-[#79639C] bg-white px-5 text-sm font-semibold text-[#503681] transition hover:bg-[#F1EBF8] disabled:opacity-60"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={isSaving || !projectName.trim()}
+                className="h-11 rounded-xl bg-[#503681] px-5 text-sm font-semibold text-white transition hover:bg-[#432C6D] disabled:opacity-60"
+              >
+                {isSaving ? "Saving…" : "Save"}
+              </button>
+            </div>
+          </form>
+        </dialog>
       )}
 
       <ul className="flex flex-col gap-1">
