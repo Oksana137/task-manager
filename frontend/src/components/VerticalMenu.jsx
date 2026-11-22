@@ -9,7 +9,7 @@ import addSquare from "../icons/add_square.svg";
 
 const menuItems = [
   { icon: category, label: "Home", path: "/" },
-  { icon: task, label: "Task", path: "/tasks-list" },
+  { icon: task, label: "Tasks", path: "/tasks-list" },
 ];
 
 const projectSaveErrors = {

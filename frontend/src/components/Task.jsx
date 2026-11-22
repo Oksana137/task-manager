@@ -12,6 +12,8 @@ const Task = ({ task, onDragStart }) => {
       className="
         cursor-move
         rounded-2xl
+        border
+        border-[#ECECEC]
         bg-white
         p-5
         shadow-sm

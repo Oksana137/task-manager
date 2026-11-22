@@ -42,8 +42,8 @@ const TasksPage = () => {
   }
 
   return (
-    <div className="flex h-full flex-col bg-[#F8F9FD]">
-      <TasksHeader count={filteredTasks.length} />
+    <div className="flex h-full flex-col">
+      <TasksHeader />
 
       <div className="mt-6 flex flex-1 overflow-hidden">
         <div className="w-1/2">

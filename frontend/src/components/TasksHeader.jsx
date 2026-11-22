@@ -1,11 +1,15 @@
-const TasksHeader = ({ count }) => (
-  <div className="flex items-center gap-3 p-8">
-    <h1 className="text-3xl font-bold text-[#0D062D]">Tasks</h1>
+import { useProject } from "../contexts/ProjectContext";
 
-    <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[#EEEAFD] text-sm font-semibold text-[#625F6D]">
-      {count}
+const TasksHeader = () => {
+  const { selectedProject } = useProject();
+
+  return (
+    <div className="flex items-center gap-3 p-8">
+      <h1 className="min-w-0 break-words text-3xl font-bold text-[#0D062D]">
+        {selectedProject?.title ?? "Tasks"}
+      </h1>
     </div>
-  </div>
-);
+  );
+};
 
 export default TasksHeader;

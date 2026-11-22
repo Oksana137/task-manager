@@ -78,8 +78,8 @@ const TasksGroupPage = () => {
   }
 
   return (
-    <div className="flex h-full flex-col overflow-y-auto bg-[#F8F9FD]">
-      <TasksHeader count={filteredTasks.length} />
+    <div className="flex h-full flex-col overflow-y-auto">
+      <TasksHeader />
 
       <div className="mt-6 flex-1 px-8 pb-8">
         {moveError && (
@@ -87,7 +87,7 @@ const TasksGroupPage = () => {
             {moveError}
           </p>
         )}
-        <div className="grid grid-cols-3 gap-6">
+        <div className="grid grid-cols-3 gap-8">
           {GROUPS.map((group) => (
             <TasksGroup
               key={group.status}

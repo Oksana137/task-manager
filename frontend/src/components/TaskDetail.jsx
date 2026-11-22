@@ -166,7 +166,7 @@ const TaskDetail = ({ task, setTasks }) => {
               className="w-full rounded-xl border border-[#E5E5E5] p-3 outline-none focus:border-[#5030E5]"
             />
           ) : (
-            <p className="rounded-xl bg-[#F8F9FD] p-4 leading-7 text-[#787486]">
+            <p className="rounded-xl p-4 leading-7 text-[#787486]">
               {task.description || "No description"}
             </p>
           )}

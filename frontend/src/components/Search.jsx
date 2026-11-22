@@ -40,7 +40,7 @@ const Search = () => {
 
   return (
     <div className="relative w-full">
-      <div className="flex items-center gap-4 h-[44px] pl-8 pr-28 border rounded-lg bg-[#F5F5F5]">
+      <div className="flex items-center gap-4 h-[44px] pl-8 pr-28 border rounded-lg">
         <img src={search} alt="search" />
 
         <input
