@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useRef, useState } from "react";
+import { useOutletContext } from "react-router-dom";
 
 import TaskColumn from "../components/TaskColumn";
 import NoProjects from "../components/NoProjects";
@@ -17,6 +18,7 @@ const GROUPS = [
 ];
 
 const TaskBoardPage = () => {
+  const { openCreateTask } = useOutletContext();
   const { setTasks } = useTasks();
   const { projects, projectsLoaded } = useProject();
   const filteredTasks = useProjectTasks();
@@ -79,7 +81,7 @@ const TaskBoardPage = () => {
 
   return (
     <div className="flex h-full flex-col overflow-y-auto">
-      <ProjectHeader />
+      <ProjectHeader onNewTask={openCreateTask} />
 
       <div className="mt-6 flex-1 px-8 pb-8">
         {moveError && (
