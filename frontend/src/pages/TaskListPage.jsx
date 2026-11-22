@@ -44,7 +44,7 @@ const TaskListPage = () => {
       <ProjectHeader onNewTask={openCreateTask} filters={filters} onApplyFilters={setFilters} />
 
       {currentTask ? (
-        <div className="grid flex-1 grid-cols-1 content-start gap-5 px-8 pb-8 lg:min-h-0 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] lg:grid-rows-[minmax(0,1fr)] lg:content-stretch">
+        <div className="grid flex-1 grid-cols-1 content-start gap-8 px-4 pb-8 lg:min-h-0 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] lg:grid-rows-[minmax(0,1fr)] lg:content-stretch lg:px-8">
           <TaskList
             tasks={filteredTasks}
             currentTask={currentTask}
@@ -53,7 +53,7 @@ const TaskListPage = () => {
           <TaskDetailsPanel key={currentTask.id} task={currentTask} setTasks={setTasks} />
         </div>
       ) : (
-        <div className="flex flex-1 items-center justify-center px-8 pb-8">
+        <div className="flex flex-1 items-center justify-center px-4 pb-8 lg:px-8">
           <p role="status" className="rounded-3xl border border-dashed border-[#E5E5E5] p-10 text-center text-lg font-medium text-[#0D062D]">
             No tasks match these filters.
           </p>

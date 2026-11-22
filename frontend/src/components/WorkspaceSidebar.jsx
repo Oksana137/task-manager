@@ -5,7 +5,6 @@ import { useProject } from "../contexts/ProjectContext";
 
 import category from "../icons/category.svg";
 import task from "../icons/task.svg";
-import addSquare from "../icons/add_square.svg";
 
 const menuItems = [
   { icon: category, label: "Home", path: "/" },
@@ -61,33 +60,26 @@ const WorkspaceSidebar = () => {
   };
 
   return (
-    <aside className="h-full border-r border-[#DBDBDB] px-4 py-6">
-      <ul className="flex flex-col gap-2 pb-6">
+    <aside className="h-full overflow-y-auto px-3.5 py-4 text-white">
+      <ul className="flex flex-col gap-1 pb-5">
         {menuItems.map(({ icon, label, path }) => (
           <NavLink key={label} to={path}>
             {({ isActive }) => (
               <div
-                className={`flex items-center gap-2 rounded-md p-2 transition-colors duration-200 ${
-                  isActive ? "bg-[#F1EEFC]" : "hover:bg-[#F1EEFC]"
+                className={`flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium transition-colors duration-200 lg:px-4 lg:text-base ${
+                  isActive ? "bg-[#51388A] text-white" : "text-[#E3DCEF] hover:bg-white/10"
                 }`}
               >
-                <img src={icon} alt={label} />
-
-                <p
-                  className={`font-inter ${
-                    isActive ? "font-semibold text-[#0D062D]" : "text-[#787486]"
-                  }`}
-                >
-                  {label}
-                </p>
+                <img src={icon} alt="" className="size-5 shrink-0 brightness-0 invert" />
+                <span>{label}</span>
               </div>
             )}
           </NavLink>
         ))}
       </ul>
 
-      <div className="flex justify-between border-t border-[#DBDBDB] py-6">
-        <p className="font-inter text-xs font-bold text-[#787486]">
+      <div className="mx-3.5 flex items-center justify-between border-t border-white/25 py-4">
+        <p className="text-xs font-semibold text-[#E3DCEF]">
           MY PROJECTS
         </p>
 
@@ -102,9 +94,9 @@ const WorkspaceSidebar = () => {
             if (isFormOpen) closeForm();
             else setIsFormOpen(true);
           }}
-          className="cursor-pointer rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#5030E5]"
+          className="grid size-6 shrink-0 place-items-center rounded-md text-xl leading-none hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white"
         >
-          <img src={addSquare} alt="" />
+          <span aria-hidden="true">+</span>
         </button>
       </div>
 
@@ -143,7 +135,7 @@ const WorkspaceSidebar = () => {
               type="button"
               onClick={closeForm}
               disabled={isSaving}
-              className="rounded-full px-2.5 py-1.5 text-xs font-medium text-[#625F6D] hover:bg-[#EFE9FF] disabled:opacity-60"
+              className="rounded-full px-2.5 py-1.5 text-xs font-medium text-[#E3DCEF] hover:bg-white/10 disabled:opacity-60"
             >
               Cancel
             </button>
@@ -158,30 +150,27 @@ const WorkspaceSidebar = () => {
         </form>
       )}
 
-      <ul className="flex flex-col gap-2">
+      <ul className="flex flex-col gap-1">
         {projects.map((project) => {
           const isActive = selectedProject?.id === project.id;
 
           return (
-            <li
-              key={project.id}
-              onClick={() => setSelectedProject(project)}
-              className={`flex cursor-pointer items-center gap-2 rounded-md p-2 transition-colors duration-200 ${
-                isActive ? "bg-[#F1EEFC]" : "hover:bg-[#F1EEFC]"
-              }`}
-            >
-              <div
-                className="h-2 w-2 rounded-full"
-                style={{ backgroundColor: project.color }}
-              />
-
-              <span
-                className={`font-inter ${
-                  isActive ? "font-semibold text-[#0D062D]" : "text-[#787486]"
+            <li key={project.id}>
+              <button
+                type="button"
+                onClick={() => setSelectedProject(project)}
+                aria-pressed={isActive}
+                className={`flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-sm transition-colors lg:px-4 lg:text-base ${
+                  isActive ? "bg-[#49346F] font-semibold text-white" : "text-[#E3DCEF] hover:bg-white/10"
                 }`}
               >
-                {project.title}
-              </span>
+                <span
+                  aria-hidden="true"
+                  className="size-2.5 shrink-0 rounded-full"
+                  style={{ backgroundColor: project.color }}
+                />
+                <span className="min-w-0 truncate" title={project.title}>{project.title}</span>
+              </button>
             </li>
           );
         })}

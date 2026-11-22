@@ -13,18 +13,26 @@ const TaskCard = ({ task, onDragStart }) => {
         cursor-move
         rounded-2xl
         border
-        border-[#ECECEC]
+        border-[#DDD7EB]
         bg-white
         p-5
-        shadow-sm
         transition
         hover:shadow-md
       "
     >
-      {/* Badge */}
-      <div className="mb-3">
+      <h3 className="break-words text-lg font-semibold leading-snug text-[#0D062D]">
+        {task.title}
+      </h3>
+
+      {task.description && (
+        <p className="mt-2 break-words text-sm leading-relaxed text-[#514766]">
+          {task.description}
+        </p>
+      )}
+
+      <div className="mt-3">
         <span
-          className="rounded px-2 py-1 text-xs font-medium"
+          className="inline-flex rounded-full px-3 py-1 text-xs font-medium"
           style={{
             color: badge.textColor,
             backgroundColor: badge.bgColor,
@@ -33,14 +41,6 @@ const TaskCard = ({ task, onDragStart }) => {
           {badge.text}
         </span>
       </div>
-
-      {/* Title */}
-      <h3 className="mb-2 text-lg font-semibold text-[#0D062D]">
-        {task.title}
-      </h3>
-
-      {/* Description */}
-      <p className="text-sm text-[#787486]">{task.description}</p>
     </article>
   );
 };

@@ -86,20 +86,20 @@ const TaskBoardPage = () => {
   const hasNoMatches = visibleTasks.length === 0;
 
   return (
-    <div className="flex h-full flex-col overflow-y-auto">
+    <div className="flex h-full flex-col overflow-y-auto bg-white">
       <ProjectHeader
         onNewTask={openCreateTask}
         filters={filters}
         onApplyFilters={setFilters}
       />
 
-      <div className="mt-6 flex flex-1 flex-col px-8 pb-8">
+      <div className="flex flex-1 flex-col px-4 pb-8 lg:px-8">
         {moveError && (
           <p role="alert" className="mb-4 text-sm text-red-600">
             {moveError}
           </p>
         )}
-        <div className={`grid grid-cols-3 gap-8 ${hasNoMatches ? "[&>section]:min-h-0" : ""}`}>
+        <div className={`grid grid-cols-1 gap-8 lg:grid-cols-3 ${hasNoMatches ? "[&>section]:min-h-0" : ""}`}>
           {GROUPS.map((group) => (
             <TaskColumn
               key={group.status}

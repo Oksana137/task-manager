@@ -40,8 +40,8 @@ const TaskSearch = () => {
 
   return (
     <div className="relative w-full">
-      <div className="flex items-center gap-4 h-[44px] pl-8 pr-28 border rounded-lg">
-        <img src={search} alt="search" />
+      <div className="flex h-11 items-center gap-3 rounded-xl border border-[#716090] bg-white px-4 focus-within:ring-2 focus-within:ring-[#DCD3EE]">
+        <img src={search} alt="" className="size-5 shrink-0" />
 
         <input
           type="text"
@@ -49,8 +49,9 @@ const TaskSearch = () => {
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setTimeout(() => setIsFocused(false), 150)}
-          placeholder="Search for anything ..."
-          className="w-full outline-none bg-transparent"
+          aria-label="Search tasks"
+          placeholder="Search tasks..."
+          className="min-w-0 flex-1 bg-transparent text-sm font-medium text-[#0D062D] outline-none placeholder:text-[#514766]"
         />
       </div>
 

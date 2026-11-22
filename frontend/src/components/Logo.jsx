@@ -1,16 +1,8 @@
-import colorfilter from "../icons/colorfilter.svg";
-import arrows from "../icons/arrows.svg";
-
 const Logo = () => {
   return (
-    <div className="h-full px-4 py-6 border-b-[1px] border-r-[1px] border-[#DBDBDB] flex items-center">
-      <div className="flex gap-14">
-        <div className="flex gap-2">
-          <img src={colorfilter} alt="colorfilter" />
-          <p className="inter text-2xl whitespace-nowrap"> Project M. </p>
-        </div>
-        <img src={arrows} alt="arrows" />
-      </div>
+    <div className="relative flex h-full items-center gap-2 px-3 text-white after:absolute after:inset-x-7 after:bottom-0 after:border-b after:border-white/25 after:content-[''] lg:gap-3 lg:px-8">
+      <span aria-hidden="true" className="size-3 shrink-0 rounded-full bg-[#633BEE] lg:size-4" />
+      <p className="whitespace-nowrap font-bold tracking-tight lg:text-2xl">Project M.</p>
     </div>
   );
 };
