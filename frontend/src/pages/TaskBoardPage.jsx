@@ -21,7 +21,8 @@ const TaskBoardPage = () => {
   const { openCreateTask } = useOutletContext();
   const { setTasks } = useTasks();
   const { projects, projectsLoaded } = useProject();
-  const filteredTasks = useProjectTasks();
+  const projectTasks = useProjectTasks();
+  const [filters, setFilters] = useState({ statuses: [], priorities: [] });
 
   const draggedTaskId = useRef(null);
   const pendingMoves = useRef(new Set());
@@ -35,7 +36,7 @@ const TaskBoardPage = () => {
     async (status) => {
       const taskId = draggedTaskId.current;
       draggedTaskId.current = null;
-      const task = filteredTasks.find(({ id }) => id === taskId);
+      const task = projectTasks.find(({ id }) => id === taskId);
       if (!task || task.status === status || pendingMoves.current.has(taskId)) return;
 
       pendingMoves.current.add(taskId);
@@ -54,11 +55,19 @@ const TaskBoardPage = () => {
         pendingMoves.current.delete(taskId);
       }
     },
-    [filteredTasks, setTasks],
+    [projectTasks, setTasks],
   );
 
+  const visibleTasks = useMemo(() => {
+    const { statuses, priorities } = filters;
+    return projectTasks.filter((task) =>
+      (!statuses.length || statuses.includes(task.status)) &&
+      (!priorities.length || priorities.includes(task.priority)),
+    );
+  }, [filters, projectTasks]);
+
   const tasksByStatus = useMemo(() => {
-    return filteredTasks.reduce(
+    return visibleTasks.reduce(
       (acc, task) => {
         acc[task.status].push(task);
         return acc;
@@ -69,27 +78,33 @@ const TaskBoardPage = () => {
         done: [],
       },
     );
-  }, [filteredTasks]);
+  }, [visibleTasks]);
 
   if (projectsLoaded && projects.length === 0) {
     return <NoProjects />;
   }
 
-  if (filteredTasks.length === 0) {
+  if (projectTasks.length === 0) {
     return <NoTasks />;
   }
 
+  const hasNoMatches = visibleTasks.length === 0;
+
   return (
     <div className="flex h-full flex-col overflow-y-auto">
-      <ProjectHeader onNewTask={openCreateTask} />
+      <ProjectHeader
+        onNewTask={openCreateTask}
+        filters={filters}
+        onApplyFilters={setFilters}
+      />
 
-      <div className="mt-6 flex-1 px-8 pb-8">
+      <div className="mt-6 flex flex-1 flex-col px-8 pb-8">
         {moveError && (
           <p role="alert" className="mb-4 text-sm text-red-600">
             {moveError}
           </p>
         )}
-        <div className="grid grid-cols-3 gap-8">
+        <div className={`grid grid-cols-3 gap-8 ${hasNoMatches ? "[&>section]:min-h-0" : ""}`}>
           {GROUPS.map((group) => (
             <TaskColumn
               key={group.status}
@@ -100,6 +115,16 @@ const TaskBoardPage = () => {
             />
           ))}
         </div>
+        {hasNoMatches && (
+          <div className="flex flex-1 items-center justify-center py-6">
+            <p
+              role="status"
+              className="max-w-sm rounded-3xl border border-dashed border-[#E5E5E5] bg-white p-10 text-center text-lg font-medium text-[#0D062D]"
+            >
+              No tasks match these filters.
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );
