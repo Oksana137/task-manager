@@ -6,16 +6,13 @@ import notification from "../icons/notification.svg";
 
 const WorkspaceHeader = () => {
   return (
-    <div className="border-b border-[#DBDBDB] px-8 py-6">
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-4">
+    <div className="border-b border-[#DBDBDB] px-8 py-6 min-[1054px]:pr-10">
+      <div className="flex items-center justify-end gap-6">
         <div className="hidden min-[1054px]:block">
           <TaskSearch />
         </div>
 
-        <div className="ml-auto flex items-center gap-8">
-
-          <AccountMenu />
-        </div>
+        <AccountMenu />
       </div>
     </div>
   );
