@@ -18,7 +18,7 @@ const projectSaveErrors = {
   404: "This server does not support creating projects yet.",
 };
 
-const VerticalMenu = () => {
+const WorkspaceSidebar = () => {
   const { projects, selectedProject, setSelectedProject, addProject } = useProject();
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [projectName, setProjectName] = useState("");
@@ -190,4 +190,4 @@ const VerticalMenu = () => {
   );
 };
 
-export default VerticalMenu;
+export default WorkspaceSidebar;

@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
-import TasksList from "../components/TasksList";
-import TaskDetail from "../components/TaskDetail";
+import TaskList from "../components/TaskList";
+import TaskDetailsPanel from "../components/TaskDetailsPanel";
 import NoProjects from "../components/NoProjects";
 import NoTasks from "../components/NoTasks";
-import TasksHeader from "../components/TasksHeader";
+import ProjectHeader from "../components/ProjectHeader";
 
 import { useTasks } from "../contexts/TasksContext";
 import { useProject } from "../contexts/ProjectContext";
 import { useProjectTasks } from "../hooks/useProjectTasks";
 
-const TasksPage = () => {
+const TaskListPage = () => {
   const { tasks, setTasks } = useTasks();
   const { projects, projectsLoaded } = useProject();
   const filteredTasks = useProjectTasks();
@@ -43,11 +43,11 @@ const TasksPage = () => {
 
   return (
     <div className="flex h-full flex-col">
-      <TasksHeader />
+      <ProjectHeader />
 
       <div className="mt-6 flex flex-1 overflow-hidden">
         <div className="w-1/2">
-          <TasksList
+          <TaskList
             tasks={filteredTasks}
             currentTask={currentTask}
             setCurrentTask={setSelectedTask}
@@ -56,11 +56,11 @@ const TasksPage = () => {
         </div>
 
         <div className="w-1/2">
-          <TaskDetail task={currentTask} setTasks={setTasks} />
+          <TaskDetailsPanel task={currentTask} setTasks={setTasks} />
         </div>
       </div>
     </div>
   );
 };
 
-export default TasksPage;
+export default TaskListPage;

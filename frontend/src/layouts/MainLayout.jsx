@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
-import HorizontalMenu from "../components/HorizontalMenu";
-import VerticalMenu from "../components/VerticalMenu";
-import CreateTask from "../components/CreateTask";
+import WorkspaceHeader from "../components/WorkspaceHeader";
+import WorkspaceSidebar from "../components/WorkspaceSidebar";
+import CreateTaskDialog from "../components/CreateTaskDialog";
 import Logo from "../components/Logo";
 import { useProject } from "../contexts/ProjectContext";
 import { useProjectTasks } from "../hooks/useProjectTasks";
@@ -23,11 +23,11 @@ const MainLayout = () => {
       </div>
 
       <div className="col-start-2 row-start-1">
-        <HorizontalMenu />
+        <WorkspaceHeader />
       </div>
 
       <div className="col-start-1 row-start-2 h-full">
-        <VerticalMenu />
+        <WorkspaceSidebar />
       </div>
 
       {isTasksListPage && (!selectedProject || projectTasks.length > 0) && (
@@ -52,7 +52,7 @@ const MainLayout = () => {
       )}
 
       {isCreateTaskOpen && (
-        <CreateTask open onClose={() => setIsCreateTaskOpen(false)} />
+        <CreateTaskDialog open onClose={() => setIsCreateTaskOpen(false)} />
       )}
 
       <div className="col-start-2 row-start-2">

@@ -1,10 +1,10 @@
 import { useContext } from "react";
 
 import { AuthContext } from "../contexts/AuthContext";
-import Logout from "./Logout";
+import SignOutButton from "./SignOutButton";
 import AvatarIcon from "./AvatarIcon";
 
-const Account = () => {
+const AccountMenu = () => {
   const { user } = useContext(AuthContext);
 
   return (
@@ -35,10 +35,10 @@ const Account = () => {
           </div>
         </div>
 
-        <Logout className="mt-2 w-full rounded-xl px-3 py-2 text-left text-sm font-medium text-red-500 transition hover:bg-red-50" />
+        <SignOutButton className="mt-2 w-full rounded-xl px-3 py-2 text-left text-sm font-medium text-red-500 transition hover:bg-red-50" />
       </div>
     </div>
   );
 };
 
-export default Account;
+export default AccountMenu;

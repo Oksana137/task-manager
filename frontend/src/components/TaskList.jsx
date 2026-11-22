@@ -2,7 +2,7 @@ import { useEffect } from "react";
 
 import { statusColors, statusNames } from "../units/taskDisplay";
 
-const TasksList = ({ tasks, currentTask, setCurrentTask }) => {
+const TaskList = ({ tasks, currentTask, setCurrentTask }) => {
   useEffect(() => {
     if (tasks.length === 0) {
       return;
@@ -54,4 +54,4 @@ const TasksList = ({ tasks, currentTask, setCurrentTask }) => {
   );
 };
 
-export default TasksList;
+export default TaskList;

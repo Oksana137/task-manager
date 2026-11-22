@@ -5,7 +5,7 @@ import search from "../icons/search.svg";
 import { useTasks } from "../contexts/TasksContext";
 import { useProject } from "../contexts/ProjectContext";
 
-const Search = () => {
+const TaskSearch = () => {
   const [query, setQuery] = useState("");
   const [isFocused, setIsFocused] = useState(false);
 
@@ -84,4 +84,4 @@ const Search = () => {
   );
 };
 
-export default Search;
+export default TaskSearch;

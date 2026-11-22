@@ -3,7 +3,7 @@ import { deleteToken } from "../units/storage";
 import { AuthContext } from "../contexts/AuthContext";
 import { useContext } from "react";
 
-const Logout = ({ className = "btn btn-ghost" }) => {
+const SignOutButton = ({ className = "btn btn-ghost" }) => {
   const navigate = useNavigate();
   const { setIsAuth, setUser } = useContext(AuthContext);
 
@@ -21,4 +21,4 @@ const Logout = ({ className = "btn btn-ghost" }) => {
   );
 };
 
-export default Logout;
+export default SignOutButton;

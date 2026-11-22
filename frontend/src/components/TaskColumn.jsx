@@ -1,6 +1,6 @@
 import addSquare from "../icons/add_square.svg";
-import Task from "./Task";
-import CreateTask from "./CreateTask";
+import TaskCard from "./TaskCard";
+import CreateTaskDialog from "./CreateTaskDialog";
 import { useState } from "react";
 
 const BORDER_COLORS = {
@@ -9,7 +9,7 @@ const BORDER_COLORS = {
   Done: "#8BC48A",
 };
 
-const TasksGroup = ({ title, status, tasks, onDrop, onDragStart }) => {
+const TaskColumn = ({ title, status, tasks, onDrop, onDragStart }) => {
 
   const [isCreateTaskOpen, setIsCreateTaskOpen] = useState(false);
 
@@ -48,7 +48,7 @@ const TasksGroup = ({ title, status, tasks, onDrop, onDragStart }) => {
           </button>
         )}
 
-        <CreateTask
+        <CreateTaskDialog
           open={isCreateTaskOpen}
           onClose={() => setIsCreateTaskOpen(false)}
         />
@@ -57,11 +57,11 @@ const TasksGroup = ({ title, status, tasks, onDrop, onDragStart }) => {
       {/* Tasks */}
       <div className="mt-5 flex flex-col gap-4">
         {tasks.map((task) => (
-          <Task key={task.id} task={task} onDragStart={onDragStart} />
+          <TaskCard key={task.id} task={task} onDragStart={onDragStart} />
         ))}
       </div>
     </section>
   );
 };
 
-export default TasksGroup;
+export default TaskColumn;

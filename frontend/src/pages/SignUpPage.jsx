@@ -1,7 +1,7 @@
 import { registrate } from "../units/network";
 import AuthForm from "../components/AuthForm";
 
-const SignUp = () => {
+const SignUpPage = () => {
   return (
     <AuthForm
       buttonText="Sign Up"
@@ -13,4 +13,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default SignUpPage;

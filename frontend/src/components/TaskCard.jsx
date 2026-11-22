@@ -2,7 +2,7 @@ import { memo } from "react";
 
 import { getTaskBadge } from "../units/taskDisplay";
 
-const Task = ({ task, onDragStart }) => {
+const TaskCard = ({ task, onDragStart }) => {
   const badge = getTaskBadge(task);
 
   return (
@@ -45,4 +45,4 @@ const Task = ({ task, onDragStart }) => {
   );
 };
 
-export default memo(Task);
+export default memo(TaskCard);

@@ -1,7 +1,7 @@
 import { authorize, authorizeDemo } from "../units/network";
 import AuthForm from "../components/AuthForm";
 
-const SignIn = () => {
+const SignInPage = () => {
   return (
     <AuthForm
       buttonText="Sign In"
@@ -13,4 +13,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default SignInPage;

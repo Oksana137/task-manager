@@ -1,9 +1,9 @@
 import { useCallback, useMemo, useRef, useState } from "react";
 
-import TasksGroup from "../components/TasksGroup";
+import TaskColumn from "../components/TaskColumn";
 import NoProjects from "../components/NoProjects";
 import NoTasks from "../components/NoTasks";
-import TasksHeader from "../components/TasksHeader";
+import ProjectHeader from "../components/ProjectHeader";
 
 import { useTasks } from "../contexts/TasksContext";
 import { useProject } from "../contexts/ProjectContext";
@@ -16,7 +16,7 @@ const GROUPS = [
   { title: "Done", status: "done" },
 ];
 
-const TasksGroupPage = () => {
+const TaskBoardPage = () => {
   const { setTasks } = useTasks();
   const { projects, projectsLoaded } = useProject();
   const filteredTasks = useProjectTasks();
@@ -79,7 +79,7 @@ const TasksGroupPage = () => {
 
   return (
     <div className="flex h-full flex-col overflow-y-auto">
-      <TasksHeader />
+      <ProjectHeader />
 
       <div className="mt-6 flex-1 px-8 pb-8">
         {moveError && (
@@ -89,7 +89,7 @@ const TasksGroupPage = () => {
         )}
         <div className="grid grid-cols-3 gap-8">
           {GROUPS.map((group) => (
-            <TasksGroup
+            <TaskColumn
               key={group.status}
               {...group}
               tasks={tasksByStatus[group.status]}
@@ -103,4 +103,4 @@ const TasksGroupPage = () => {
   );
 };
 
-export default TasksGroupPage;
+export default TaskBoardPage;

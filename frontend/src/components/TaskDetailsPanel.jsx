@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { statusColors, statusDots, statusNames } from "../units/taskDisplay";
 import { updateTask } from "../units/network";
 
-const TaskDetail = ({ task, setTasks }) => {
+const TaskDetailsPanel = ({ task, setTasks }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
@@ -225,4 +225,4 @@ const TaskDetail = ({ task, setTasks }) => {
   );
 };
 
-export default TaskDetail;
+export default TaskDetailsPanel;

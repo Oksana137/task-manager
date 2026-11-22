@@ -1,6 +1,6 @@
 import { useProject } from "../contexts/ProjectContext";
 
-const TasksHeader = () => {
+const ProjectHeader = () => {
   const { selectedProject } = useProject();
 
   return (
@@ -12,4 +12,4 @@ const TasksHeader = () => {
   );
 };
 
-export default TasksHeader;
+export default ProjectHeader;
